@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+            "folder_exclude_patterns": ["build-tmp", "data"],
+            "file_exclude_patterns": [".gitattributes", ".gitignore", "*.sublime-project", "*.sublime-workspace"]
+		}
+	]
+}
