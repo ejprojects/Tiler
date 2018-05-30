@@ -36,17 +36,16 @@ void draw(){
 }
 
 // ********************************************************************************************************************
+// classes
+
 // set up symmetry variable arrays. turn this into a class with a good data structure
 float[] symRot = {0, HALF_PI, PI, PI+HALF_PI};
 // int[] symFlip = {1, -1, 1, -1};
 int[] symFlip = {1, 1, 1, 1};
 
+// symmetry class - data structure to hold symmetry information for various tile systems
 
-void clr() {
-	noStroke();
-	fill(48,32);
-	rect(0,0,width,height);
-}
+
 // build a tile class - very simple, to be complicated by time variable later
 class Tile {
 	PImage img;
@@ -69,18 +68,20 @@ class Cluster {
 	int wd, ht;
 
 	Cluster (Tile tile) {
-		wd = tile.wd*2; //arbitraily se width and height (calculate exactly based on tile and symmetry later)
-		ht = tile.ht*2;
+		wd = tile.wd*3; //arbitraily se width and height (calculate exactly based on tile and symmetry later)
+		ht = tile.ht*3;
 		cluster = createGraphics(wd,ht,P3D); // create the PGraphics
 		cluster.beginDraw();
 		cluster.translate(wd/2, ht/2); // translate to the center
 
-		for (int i = 0; i < symRot.length; ++i) { //cycle through the symmetry data (develop this)
+		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
+			cluster.hint(DISABLE_DEPTH_TEST);
 			cluster.pushMatrix();
-			cluster.rotate(symRot[i]); // rotate the prescribed amount
-			cluster.rotate((symFlip[i] == -1) ? -HALF_PI : 0); // rotate to accommodate flip if necessary (improve)
-			cluster.scale(symFlip[i],1); // flip if prescribed
+			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
+			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
 			cluster.image(tile.img, 0, 0, tile.wd, tile.ht); // place it
+			cluster.popMatrix();
 		}
 
 		cluster.endDraw();
@@ -90,6 +91,14 @@ class Cluster {
 	void display() {
 		image(cluster,-wd/2,-ht/2); // always display from center point
 	}
+}
+
+// ********************************************************************************************************************
+// misellaneous functions
+void clr() {
+	noStroke();
+	fill(48,32);
+	rect(0,0,width,height);
 }
 
 
