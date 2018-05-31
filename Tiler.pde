@@ -1,4 +1,4 @@
-PImage tileImg; // this loads a tile image
+PImage tileImg1, tileImg2; 
 Tile t; //declare t as a member of the Tile class
 Cluster c; //declate my cluster
 TileSystem ts;
@@ -17,10 +17,11 @@ void setup(){
 
 	background(48);
 	frameRate(30);
-	tileImg = loadImage("tile-test.png"); // this will be replaced with the generated tiles later
-	t = new Tile(tileImg);
+	tileImg1 = loadImage("tile-test.png"); // tile image
+	tileImg2 = loadImage("tile-test-i.png"); // alternate tile image
+	t = new Tile(tileImg1);
 	c = new Cluster(t,symmetry4);
-	ts = new TileSystem(t,symmetry4,200,200,3,3,200,200);
+	ts = new TileSystem(t,symmetry12,200,200,3,3,200,200);
 
 }
 
@@ -33,6 +34,13 @@ void draw(){
 	// c.display();
 
 	ts.fill();
+
+	if(keyPressed) {
+		t.update(tileImg2);
+	}
+	else {
+		t.update(tileImg1);
+	}
 
 	ts.display();
 
@@ -62,6 +70,10 @@ class Tile {
 
 	void display() {
 		image(img,0,0);
+	}
+
+	void update(PImage img_) {
+		img = img_;
 	}
 }
 

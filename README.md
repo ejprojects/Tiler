@@ -12,3 +12,5 @@ Starting fresh with a modular tile method
 
 2018-05-30:	make a trivial TileSystem class, because. done
 
+2018-05-30: resolved TileSystem render, included basic tile switching
+

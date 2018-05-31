@@ -30,8 +30,8 @@ class TileSystem {
 	}
 
 	void fill() {
-		for (int y = 0; y < clustersHigh; ++y) {		// loop through horizontal rows (step though height)
-			for (int x = 0; x < clustersWide; ++x) {		// loop thorough clusters on each row (step through width)
+		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
+			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				clusterArray[x][y] = new Cluster(tile,symmetry);
 			}
 		}
@@ -40,14 +40,12 @@ class TileSystem {
 	void display() {
 		pushMatrix();
 		translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
-		for (int y = 0; y < clustersHigh; ++y) {		// loop through horizontal rows (step though height)
-			for (int x = 0; x < clustersWide; ++x) {		// loop thorough clusters on each row (step through width)
+		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
+			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				pushMatrix();
 				translate(x*hStep, y*vStep);
 				clusterArray[x][y].display();
 				popMatrix();
-				// println(hStep*clustersWide/-2," ",vStep*clustersHigh/-2," ",x*hStep,"",y*vStep);
-
 			}
 		}
 		popMatrix();
