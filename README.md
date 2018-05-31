@@ -10,5 +10,5 @@ Starting fresh with a modular tile method
 
 2018-05-30: adding symmetry arrays to read through during cluster building. moved symmetries to their own tab. done
 
-2018-05-30:	make a trivial TileSystem class, because.
+2018-05-30:	make a trivial TileSystem class, because. done
 

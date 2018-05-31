@@ -1,9 +1,10 @@
 PImage tileImg; // this loads a tile image
 Tile t; //declare t as a member of the Tile class
 Cluster c; //declate my cluster
+TileSystem ts;
 
 void settings() {
-	size(400,400,P3D);
+	size(600,600,P3D);
 	PJOGL.profile=1;
 	smooth();
 	// noLoop();
@@ -18,21 +19,23 @@ void setup(){
 	frameRate(30);
 	tileImg = loadImage("tile-test.png"); // this will be replaced with the generated tiles later
 	t = new Tile(tileImg);
-	c = new Cluster(t);
+	c = new Cluster(t,symmetry4);
+	ts = new TileSystem(t,symmetry4,200,200,3,3,200,200);
 
 }
 
 // ********************************************************************************************************************
 void draw(){
 	clr(); //clear the background
-	pushMatrix();
+
 	translate(mouseX, mouseY); // work at the mouse location
 
-	
-	c.display();
+	// c.display();
 
+	ts.fill();
 
-	popMatrix();
+	ts.display();
+
 }
 
 // ********************************************************************************************************************
@@ -67,7 +70,7 @@ class Cluster {
 	PGraphics cluster;
 	int wd, ht;
 
-	Cluster (Tile tile) {
+	Cluster (Tile tile, float[][] symmetry) {
 		wd = tile.wd*3; //arbitraily se width and height (calculate exactly based on tile and symmetry later)
 		ht = tile.ht*3;
 		cluster = createGraphics(wd,ht,P3D); // create the PGraphics
@@ -91,6 +94,9 @@ class Cluster {
 	void display() {
 		image(cluster,-wd/2,-ht/2); // always display from center point
 	}
+	// void display2() {
+	// 	image(cluster,0,0); 
+	// }
 }
 
 // ********************************************************************************************************************
