@@ -6,14 +6,14 @@ class TileSystem {
 	Tile tile;
 	int tileHeight, tileWidth; // derived from tile
 	float[][] symmetry;
-	float clusterHeight, clusterWidth; // the minimum rectangle that contains a cluster... how to calculate?
+	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
-	float hStep, vStep;
+	float hStep, vStep; // how far to step when tiling the plane
 	Cluster[][] clusterArray; // the array, w x h, of the field of tiles
 
 
 	TileSystem(	Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_,
-				int clustersWide_, int clustersHigh_, float hStep_, float vStep_) {
+		int clustersWide_, int clustersHigh_, float hStep_, float vStep_) {
 		tile = tile_;
 		tileWidth = tile.wd;
 		tileHeight = tile.ht;
@@ -26,10 +26,6 @@ class TileSystem {
 		vStep = vStep_;
 
 		clusterArray = new Cluster[clustersWide][clustersHigh];
-		//...
-	}
-
-	void fill() {
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				clusterArray[x][y] = new Cluster(tile,symmetry);
@@ -51,7 +47,14 @@ class TileSystem {
 		popMatrix();
 	}
 
-			
+	void choose(int tileIndex) {
+		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
+			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
+				clusterArray[x][y].choose(tileIndex);
+			}
+		}		
+	}
+
 }
 
 // ********************************************************************************************************************
