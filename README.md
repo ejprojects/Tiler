@@ -13,4 +13,5 @@ Starting fresh with a modular tile method
 2018-05-31:	can I use . syntaxt better? no.
 2018-05-31:	Adding tile animation and switching to regular array (of 30) rather than ArrayList
 			Part way there...
+			Need to fix Symmetry stepping routines
 

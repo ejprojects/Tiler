@@ -17,47 +17,8 @@ class TileGenerator {
 		tileHeight = mask.height;
 		newTile = createGraphics(tileWidth, tileHeight, P3D);
 
-		println("creat() start");
-
-		newTile.beginDraw();
-		newTile.pushMatrix();
-		newTile.strokeWeight(2);
-		newTile.stroke(255);
-		newTile.noFill();
-
-		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
-		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
-		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
-
-		newTile.popMatrix();
-		newTile.endDraw();
-		newTile.mask(mask);
-
-		println("create() finish");
-		println("newTile: "+newTile);
 	}
 
-	void update() { // here we draw to the new tile
-
-		println("tg update() start");
-
-		newTile.beginDraw();
-		newTile.pushMatrix();
-		newTile.strokeWeight(2);
-		newTile.stroke(255);
-		newTile.noFill();
-
-		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
-		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
-		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
-
-		newTile.popMatrix();
-		newTile.endDraw();
-		newTile.mask(mask);
-
-		println("tg update() finish");
-
-	}
 	PGraphics generate() { // here we draw to the new tile
 
 		println("tg generate(pg) start");
@@ -67,10 +28,11 @@ class TileGenerator {
 		newTile.strokeWeight(2);
 		newTile.stroke(255);
 		newTile.noFill();
+		newTile.background(0);
 
-		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
+		newTile.translate(tileWidth/3, tileHeight/2);  // make center of rotation inside tile
 		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
-		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
+		newTile.ellipse(0, 0, 100, 50); // arbitrary, small...
 
 		newTile.popMatrix();
 		newTile.endDraw();

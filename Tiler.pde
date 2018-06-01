@@ -1,8 +1,6 @@
 PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mas for image generator testing
-TileGenerator tg;			// declare tile generator
-// Tile t;						// declare t as a member of the Tile class
-// Cluster c;					// declare my cluster
+TileGenerator tg;			// declare tile generator - needs to be part of tile system
 TileSystem ts;				// declare ts as a Tile System
 
 // ********************************************************************************************************************
@@ -24,9 +22,7 @@ void setup(){
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
 	tg = new TileGenerator(mask,0); // test mask, test mode
-	// t = new Tile(tileImg0);
-	// t.add(tileImg1); // obsolete
-	ts = new TileSystem(mask,symmetry12,200,200,6,6,200,200);
+	ts = new TileSystem(mask,symmetry12M,692.6,600,1,1,346.3,600);
 
 }
 
@@ -34,9 +30,12 @@ void setup(){
 void draw(){
 	clr(); //clear the background
 
-	translate(mouseX, mouseY); // work at the mouse location
+	image(ts.tile.imgList[0],0,0);
 
-	// ts.display();
+	translate(mouseX, mouseY); // work at the mouse location
+	scale(0.25);
+
+	ts.display();
 
 }
 
@@ -50,6 +49,7 @@ void clr() {
 void mousePressed() {
 	// ts.update(); //can i use . syntax to go direct to Tile?
 	println("mouse 1");
+	println("ts.tile.wd: "+ts.tile.wd+" ts.tile.ht: "+ts.tile.ht);
 }
 void mouseReleased() {
 	// ts.choose(0);

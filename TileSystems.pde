@@ -19,8 +19,7 @@ class TileSystem {
 		tileMask = tileMask_;
 		tileWidth = tileMask.width;
 		tileHeight = tileMask.height;
-		// tg = new TileGenerator(tileMask, 0); // create the tile generator using the mask and 0 for no mode yet
-		tile = new Tile(tileWidth,tileHeight); // tile can now be created (it requires a TG)
+		tile = new Tile(tileWidth,tileHeight);
 		symmetry = symmetry_;
 		clusterWidth = clusterWidth_;
 		clusterHeight = clusterHeight_;
@@ -32,18 +31,21 @@ class TileSystem {
 		clusterArray = new Cluster[clustersWide][clustersHigh];
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-				clusterArray[x][y] = new Cluster(tile,symmetry);
+				clusterArray[x][y] = new Cluster(tile,symmetry,clusterWidth,clusterHeight);
 			}
 		}
 	}
 
 	void display() {
+		println("tile.choose(0): "+tile.choose(0));
+
 		pushMatrix();
 		translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				pushMatrix();
 				translate(x*hStep, y*vStep);
+				clusterArray[x][y].update();
 				clusterArray[x][y].display();
 				popMatrix();
 			}
@@ -63,23 +65,23 @@ class TileSystem {
 // cluster class - to hold repeatable tiling units
 class Cluster {
 	PGraphics cluster;
-	int wd, ht;
+	float wd, ht;
 	Tile tile;
 	float[][] symmetry;
 
-	Cluster (Tile tile_, float[][] symmetry_) {
+	Cluster (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
 		tile = tile_;
 		symmetry = symmetry_;
-		wd = tile.wd*3; //arbitraily set width and height (calculate exactly based on tile and symmetry later)
-		ht = tile.ht*3;
-		cluster = createGraphics(wd,ht,P3D); // create the PGraphics
+		wd = clusterWidth_; 
+		ht = clusterHeight_;
+		cluster = createGraphics(round(wd),round(ht),P3D); // create the PGraphics
 
 		choose(0); // constructor makes use of 'choose' function below to initialize.
 
 	}
 
 	void update() {
-		// tile.update();
+		tile.update();
 
 		cluster.beginDraw();
 		cluster.translate(wd/2, ht/2); // translate to the center
@@ -90,7 +92,7 @@ class Cluster {
 			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
 			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
 			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
-			cluster.image(tile.imgList[0], 0, 0, tile.wd, tile.ht); // place it
+			cluster.image(tile.imgList[tile.currentFrame], 0, 0, tile.wd, tile.ht); // place it
 			cluster.popMatrix();
 		}
 
@@ -136,7 +138,7 @@ class Tile {
 		imgList[currentFrame] = tg.generate();
 	}
 
-	void udpate() {
+	void update() {
 		currentFrame++;
 		if (currentFrame >= imgList.length) {
 			currentFrame = 0;
@@ -157,6 +159,13 @@ class Tile {
 
 // ********************************************************************************************************************
 // tile symmetries
+
+
+
+float[][] symmetry1 = {	{0},		// rotation
+						{0},		// flip, i.e., rotation on y axis
+						{0},		// x translation
+						{0}	};		// y translation
 
 float[][] symmetry4 = {	{0,		0,		PI,		PI	},		// rotation
 						{0,		PI,		0,		PI	},		// flip, i.e., rotation on y axis
