@@ -3,20 +3,24 @@
 
 class TileSystem {
 
-	Tile tile;
-	int tileHeight, tileWidth; // derived from tile
-	float[][] symmetry; // symmetry data
+	PImage tileMask; // fill with mask
+	int tileHeight, tileWidth; // derived from tile mask
+	TileGenerator tg; // we have to have a tile generator
+	Tile tile; // a tile object, to be filled with generated graphics
+	float[][] symmetry; // symmetry data for creating clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
 	float hStep, vStep; // how far to step when tiling the plane
 	Cluster[][] clusterArray; // the array, w x h, of the field of tiles
 
 
-	TileSystem(	Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_,
+	TileSystem(PImage tileMask_, float[][] symmetry_, float clusterWidth_, float clusterHeight_,
 		int clustersWide_, int clustersHigh_, float hStep_, float vStep_) {
-		tile = tile_;
-		tileWidth = tile.wd;
-		tileHeight = tile.ht;
+		tileMask = tileMask_;
+		tileWidth = tileMask.width;
+		tileHeight = tileMask.height;
+		// tg = new TileGenerator(tileMask, 0); // create the tile generator using the mask and 0 for no mode yet
+		tile = new Tile(tileWidth,tileHeight); // tile can now be created (it requires a TG)
 		symmetry = symmetry_;
 		clusterWidth = clusterWidth_;
 		clusterHeight = clusterHeight_;
@@ -56,67 +60,6 @@ class TileSystem {
 	}
 }
 
-// Tile class - holds tiles of a certain form, in different states (history or animation frames)
-// NEW version with plain array (30 frames of memory)
-class Tile {
-	PImage img;
-	PImage[] imgList = new PImage[30];
-	int wd, ht; // derived from PImage
-	int mode; // image generator mode
-	int currentFrame; // points to the current frame
-
-	Tile (PImage img_) {
-		wd = img_.width;
-		ht = img_.height;
-		img = img_;
-		currentFrame = 0;
-		imgList[currentFrame] = tg.generated();
-	}
-
-	void udpate() {
-		currentFrame++;
-		if (currentFrame >= imgList.length) {
-			currentFrame = 0;
-		}
-		imgList[currentFrame] = tg.generated();
-
-	}
-
-}
-
-// Tile class - holds tiles of a certain form, in different states (history or animation frames)
-// OLD version with ArrayList
-// class Tile {
-// 	PImage img;
-// 	ArrayList<PImage> imgList = new ArrayList<PImage>();
-// 	int wd, ht; // derived from PImage
-// 	int mode; // image generator mode
-
-// 	Tile (PImage img_) {
-// 		wd = img_.width;
-// 		ht = img_.height;
-// 		img = img_;
-// 		imgList.add(img);
-// 	}
-
-// 	void display() { // unused?
-// 		image(img,0,0);
-// 	}
-
-// 	void display(int i) { // unused?
-// 		image(imgList.get(i),0,0);
-// 	}
-
-// 	void add(PImage img) {
-// 		imgList.add(img);
-// 	}
-
-// 	void udpate() {
-
-// 	}
-
-// }
-
 // cluster class - to hold repeatable tiling units
 class Cluster {
 	PGraphics cluster;
@@ -133,6 +76,25 @@ class Cluster {
 
 		choose(0); // constructor makes use of 'choose' function below to initialize.
 
+	}
+
+	void update() {
+		// tile.update();
+
+		cluster.beginDraw();
+		cluster.translate(wd/2, ht/2); // translate to the center
+
+		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
+			cluster.hint(DISABLE_DEPTH_TEST);
+			cluster.pushMatrix();
+			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
+			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
+			cluster.image(tile.imgList[0], 0, 0, tile.wd, tile.ht); // place it
+			cluster.popMatrix();
+		}
+
+		cluster.endDraw();
 	}
 
 	void choose(int tileIndex) {
@@ -156,6 +118,41 @@ class Cluster {
 	void display() { // unused
 		image(cluster,-wd/2,-ht/2); // always display from center point
 	}
+}
+
+// Tile class - holds tiles of a certain form, in different states (history or animation frames)
+// NEW version with plain array (30 frames of memory)
+class Tile {
+	PImage[] imgList;
+	int wd, ht; // derived from PImage
+	int mode; // image generator mode
+	int currentFrame; // points to the current frame
+
+	Tile (int wd_, int ht_) {
+		wd = wd_;
+		ht = ht_;
+		imgList = new PImage[30];
+		currentFrame = 0; // start current frame at 0
+		imgList[currentFrame] = tg.generate();
+	}
+
+	void udpate() {
+		currentFrame++;
+		if (currentFrame >= imgList.length) {
+			currentFrame = 0;
+		}
+		imgList[currentFrame] = tg.generate();
+
+	}
+
+	PImage choose(int offset) {
+		int offsetFrame = (currentFrame - offset);
+		if (offsetFrame < 0) {
+			offsetFrame += imgList.length;
+		}
+		return(imgList[offsetFrame]);
+	}
+
 }
 
 // ********************************************************************************************************************

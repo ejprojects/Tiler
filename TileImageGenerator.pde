@@ -16,9 +16,8 @@ class TileGenerator {
 		tileWidth = mask.width;
 		tileHeight = mask.height;
 		newTile = createGraphics(tileWidth, tileHeight, P3D);
-	}
 
-	PGraphics generated() { // here we draw to the new tile
+		println("creat() start");
 
 		newTile.beginDraw();
 		newTile.pushMatrix();
@@ -29,30 +28,55 @@ class TileGenerator {
 		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
 		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
 		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
-		// switch (mode) {
-		// 	case 0:
-		// 	design0();
-		// 	break;
-
-		// 	case 1:
-		// 	design1();
-		// 	break;
-
-		// 	case 2:
-		// 	design2();
-		// 	break;
-
-		// 	default:	
-		// 	println("design mode case broken");
-		// 	break;
-		// }
-
-
 
 		newTile.popMatrix();
 		newTile.endDraw();
-
 		newTile.mask(mask);
+
+		println("create() finish");
+		println("newTile: "+newTile);
+	}
+
+	void update() { // here we draw to the new tile
+
+		println("tg update() start");
+
+		newTile.beginDraw();
+		newTile.pushMatrix();
+		newTile.strokeWeight(2);
+		newTile.stroke(255);
+		newTile.noFill();
+
+		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
+		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
+		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
+
+		newTile.popMatrix();
+		newTile.endDraw();
+		newTile.mask(mask);
+
+		println("tg update() finish");
+
+	}
+	PGraphics generate() { // here we draw to the new tile
+
+		println("tg generate(pg) start");
+
+		newTile.beginDraw();
+		newTile.pushMatrix();
+		newTile.strokeWeight(2);
+		newTile.stroke(255);
+		newTile.noFill();
+
+		newTile.translate(tileWidth/3, tileHeight/3);  // make center of rotation inside tile
+		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
+		newTile.ellipse(0, 0, 50, 30); // arbitrary, small...
+
+		newTile.popMatrix();
+		newTile.endDraw();
+		newTile.mask(mask);
+
+		println("tg generate(pg) finish");
 
 		return(newTile);
 	}
