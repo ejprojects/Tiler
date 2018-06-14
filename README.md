@@ -10,9 +10,9 @@ Starting fresh with a modular tile method
 2018-05-30:	resolved TileSystem render, included basic tile switching
 2018-05-30:	working on tile image updating... maybe I need two different tiles?
 2018-05-31:	making Tile class use an ArrayList to hold historical tile states (in answer to above question) Done
-2018-05-31:	can I use . syntaxt better? no.
+2018-05-31:	can I use . syntax better? no.
 2018-05-31:	Adding tile animation and switching to regular array (of 30) rather than ArrayList
 			Part way there...
 			Need to fix Symmetry stepping routines
 2018-06-14:	Done. Created Tiling[][] variable to describe stepping and offsets, scalable. 
-
+2018-06-14:	Putting TileGenerator inside TileSystem, add multiple TileSystems to see interference
