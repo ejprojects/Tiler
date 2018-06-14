@@ -2,6 +2,7 @@ PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mas for image generator testing
 TileGenerator tg;			// declare tile generator - needs to be part of tile system
 TileSystem ts;				// declare ts as a Tile System
+float testScale = 0.25;		// scale for testing tile systems, adjusted with mouse wheel
 
 // ********************************************************************************************************************
 void settings() {
@@ -22,7 +23,7 @@ void setup(){
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
 	tg = new TileGenerator(mask,0); // test mask, test mode
-	ts = new TileSystem(mask,symmetry12M,692.6,600,1,1,346.3,600);
+	ts = new TileSystem(mask,symmetry12M,tiling12M,6,18);
 
 }
 
@@ -31,12 +32,12 @@ void draw(){
 
 	// clr(); //clear the background
 	background(0);
-	blendMode(LIGHTEST);
+	blendMode(ADD);
 
 	image(ts.tile.imgList[0],0,0);
 
 	translate(mouseX, mouseY); // work at the mouse location
-	scale(0.25);
+	scale(testScale);
 
 	ts.display();
 
@@ -57,5 +58,11 @@ void mousePressed() {
 void mouseReleased() {
 	// ts.choose(0);
 	println("mouse 0");
+}
+
+void mouseWheel(MouseEvent event) {
+  testScale += float(event.getCount())/100;
+  if(testScale<0.1) {testScale = 0.1;};
+  // println("Scale: "+testScale);
 }
 

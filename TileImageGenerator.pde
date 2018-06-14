@@ -22,19 +22,26 @@ class TileGenerator {
 	PGraphics generate() { // here we draw to the new tile
 
 		newTile.beginDraw();
-		newTile.pushMatrix();
+		// newTile.pushMatrix();
 		newTile.strokeWeight(2);
 		newTile.stroke(255);
 		newTile.noFill();
 		newTile.blendMode(ADD);
 		newTile.clear();
 
-		newTile.translate(tileWidth/3, tileHeight/2);  // make center of rotation inside tile
-		newTile.rotate(float(millis())/1000*TWO_PI);  // one rev per second
-		newTile.ellipse(0, 0, 100, 50); // arbitrary, small...
-
+		// this routine to be replaced by various design functions
+		newTile.pushMatrix();
+		newTile.translate(tileWidth/4, tileHeight/3);  // make center of rotation inside tile
+		newTile.rotate(float(millis())/1000*PI);  // 1/2 rev per second
+		newTile.ellipse(0, 0, 250, 125); // arbitrary, small...
 		newTile.popMatrix();
-		newTile.mask(mask);
+		newTile.pushMatrix();
+		newTile.translate(tileWidth/2, 3*tileHeight/4);  // make center of rotation inside tile
+		newTile.rotate(float(millis())/1667*PI);  // slower 
+		newTile.ellipse(0, 0, 250, 125); // arbitrary, small...
+		newTile.popMatrix();
+		
+		newTile.mask(mask); // maybe alter masking later
 		newTile.endDraw();
 
 		return(newTile);

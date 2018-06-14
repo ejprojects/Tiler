@@ -14,5 +14,5 @@ Starting fresh with a modular tile method
 2018-05-31:	Adding tile animation and switching to regular array (of 30) rather than ArrayList
 			Part way there...
 			Need to fix Symmetry stepping routines
-			
+2018-06-14:	Done. Created Tiling[][] variable to describe stepping and offsets, scalable. 
 

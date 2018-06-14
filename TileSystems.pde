@@ -8,25 +8,32 @@ class TileSystem {
 	TileGenerator tg; // we have to have a tile generator
 	Tile tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
+	float[][] tiling; // transformation data for tiling out clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
-	float hStep, vStep; // how far to step when tiling the plane
+	float hStep, vStep, hOffset, vOffset, hOffsetPeriod, vOffsetPeriod; // how far to step when tiling the plane
 	Cluster[][] clusterArray; // the array, w x h, of the field of tiles
 
 
-	TileSystem(PImage tileMask_, float[][] symmetry_, float clusterWidth_, float clusterHeight_,
-		int clustersWide_, int clustersHigh_, float hStep_, float vStep_) {
+	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
+		int clustersWide_, int clustersHigh_) {
 		tileMask = tileMask_;
 		tileWidth = tileMask.width;
 		tileHeight = tileMask.height;
 		tile = new Tile(tileWidth,tileHeight);
-		symmetry = symmetry_;
-		clusterWidth = clusterWidth_;
-		clusterHeight = clusterHeight_;
 		clustersWide = clustersWide_;
 		clustersHigh = clustersHigh_;
-		hStep = hStep_;
-		vStep = vStep_;
+		symmetry = symmetry_;
+		tiling = tiling_;
+		clusterWidth = tiling[0][0];
+		clusterHeight = tiling[1][0];
+		hStep = tiling[0][1] * clusterWidth;
+		vStep = tiling[1][1] * clusterHeight;
+		hOffset = tiling[0][2] * clusterWidth;
+		hOffsetPeriod = tiling[0][3];
+		vOffset = tiling[1][2] * clusterHeight;
+		vOffsetPeriod = tiling[1][3];
+
 
 		clusterArray = new Cluster[clustersWide][clustersHigh];
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
@@ -37,16 +44,19 @@ class TileSystem {
 	}
 
 	void display() {
-		println("tile.choose(0): "+tile.choose(0));
+		// println("tile.choose(0): "+tile.choose(0));
 
 		pushMatrix();
 		translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
+
+		clusterArray[0][0].update();
+
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				pushMatrix();
-				translate(x*hStep, y*vStep);
-				clusterArray[x][y].update();
-				clusterArray[x][y].display();
+				translate((float(x)*hStep)+((y%hOffsetPeriod)*hOffset), (float(y)*vStep)+((x%vOffsetPeriod)*vOffset));
+				// clusterArray[x][y].update(); // don't update each cluster each time?
+				clusterArray[0][0].display();
 				popMatrix();
 			}
 		}
@@ -84,6 +94,8 @@ class Cluster {
 		tile.update();
 
 		cluster.beginDraw();
+		cluster.clear(); // makes the backroud transparent
+		cluster.blendMode(ADD); // allow for overlap, if any
 		cluster.translate(wd/2, ht/2); // translate to the center
 
 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
@@ -192,39 +204,4 @@ class Tile {
 
 // }
 
-// ********************************************************************************************************************
-// tile symmetries
 
-
-
-float[][] symmetry1 = {	{0},		// rotation
-						{0},		// flip, i.e., rotation on y axis
-						{0},		// x translation
-						{0}	};		// y translation
-
-float[][] symmetry4 = {	{0,		0,		PI,		PI	},		// rotation
-						{0,		PI,		0,		PI	},		// flip, i.e., rotation on y axis
-						{0,		0,		0,		0,	},		// x translation
-						{0,		0,		0,		0,	}	};	// y translation
-
-float[][] symmetry6 = {	{0,		0,		2*PI/3,	2*PI/3,	4*PI/3,	4*PI/3	},		// rotation
-						{0,		PI,		0,		PI,		0,		PI		},		// flip, 180 for mirror
-						{0,		0,		0,		0,		0,		0		},		// x translation
-						{0,		0,		0,		0,		0,		0		}	};	// y translation
-
-
-						float[][] symmetry12M = {
-//0		1		2		3		4		5		6		7		8		9		10		11			*/
-{0,		0,		2*PI/6,	2*PI/6,	4*PI/6,	4*PI/6,	6*PI/6, 6*PI/6,	8*PI/6,	8*PI/6,	10*PI/6,10*PI/6},	// rotation
-{0,		PI,		0,		PI,		0,		PI,		0,		PI,		0,		PI,		0,		PI},		// flip, PI for mirror
-{0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0},			// x translation
-{0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0}			// y translation
-};
-
-float[][] symmetry12 = {
-//0		1		2		3		4		5		6		7		8		9		10		11			*/
-{0*PI/6,1*PI/6,	2*PI/6,	3*PI/6,	4*PI/6,	5*PI/6,	6*PI/6, 7*PI/6,	8*PI/6,	9*PI/6,	10*PI/6,11*PI/6},	// rotation
-{0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0},		// flip, PI for mirror
-{0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0},			// x translation
-{0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0}			// y translation
-};
