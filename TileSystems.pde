@@ -102,6 +102,7 @@ class Cluster {
 	void choose(int tileIndex) {
 
 		cluster.beginDraw();
+		// cluster.blendMode(ADD);
 		cluster.translate(wd/2, ht/2); // translate to the center
 
 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
@@ -125,7 +126,7 @@ class Cluster {
 // Tile class - holds tiles of a certain form, in different states (history or animation frames)
 // NEW version with plain array (30 frames of memory)
 class Tile {
-	PImage[] imgList;
+	PGraphics[] imgList;
 	int wd, ht; // derived from PImage
 	int mode; // image generator mode
 	int currentFrame; // points to the current frame
@@ -133,7 +134,10 @@ class Tile {
 	Tile (int wd_, int ht_) {
 		wd = wd_;
 		ht = ht_;
-		imgList = new PImage[30];
+		imgList = new PGraphics[30];
+		for (int i = 0; i < imgList.length; ++i) {
+			imgList[i] = createGraphics(wd, ht, P3D);
+		}
 		currentFrame = 0; // start current frame at 0
 		imgList[currentFrame] = tg.generate();
 	}
@@ -147,15 +151,46 @@ class Tile {
 
 	}
 
-	PImage choose(int offset) {
+	PGraphics choose(int offset) {
 		int offsetFrame = (currentFrame - offset);
 		if (offsetFrame < 0) {
 			offsetFrame += imgList.length;
 		}
 		return(imgList[offsetFrame]);
 	}
-
 }
+// class Tile {
+// 	PImage[] imgList;
+// 	int wd, ht; // derived from PImage
+// 	int mode; // image generator mode
+// 	int currentFrame; // points to the current frame
+
+// 	Tile (int wd_, int ht_) {
+// 		wd = wd_;
+// 		ht = ht_;
+// 		imgList = new PImage[30];
+// 		currentFrame = 0; // start current frame at 0
+// 		imgList[currentFrame] = tg.generate();
+// 	}
+
+// 	void update() {
+// 		currentFrame++;
+// 		if (currentFrame >= imgList.length) {
+// 			currentFrame = 0;
+// 		}
+// 		imgList[currentFrame] = tg.generate();
+
+// 	}
+
+// 	PImage choose(int offset) {
+// 		int offsetFrame = (currentFrame - offset);
+// 		if (offsetFrame < 0) {
+// 			offsetFrame += imgList.length;
+// 		}
+// 		return(imgList[offsetFrame]);
+// 	}
+
+// }
 
 // ********************************************************************************************************************
 // tile symmetries
@@ -178,7 +213,7 @@ float[][] symmetry6 = {	{0,		0,		2*PI/3,	2*PI/3,	4*PI/3,	4*PI/3	},		// rotation
 						{0,		0,		0,		0,		0,		0		}	};	// y translation
 
 
-float[][] symmetry12M = {
+						float[][] symmetry12M = {
 //0		1		2		3		4		5		6		7		8		9		10		11			*/
 {0,		0,		2*PI/6,	2*PI/6,	4*PI/6,	4*PI/6,	6*PI/6, 6*PI/6,	8*PI/6,	8*PI/6,	10*PI/6,10*PI/6},	// rotation
 {0,		PI,		0,		PI,		0,		PI,		0,		PI,		0,		PI,		0,		PI},		// flip, PI for mirror

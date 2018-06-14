@@ -7,7 +7,7 @@ TileSystem ts;				// declare ts as a Tile System
 void settings() {
 	size(600,600,P3D);
 	PJOGL.profile=1;
-	smooth();
+	smooth(8);
 	// noLoop();
 	// noSmooth();
 	// fullScreen(1);
@@ -16,7 +16,7 @@ void settings() {
 // ********************************************************************************************************************
 void setup(){
 
-	background(48);
+	background(0);
 	frameRate(30);
 	tileImg0 = loadImage("tile-test.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
@@ -28,7 +28,10 @@ void setup(){
 
 // ********************************************************************************************************************
 void draw(){
-	clr(); //clear the background
+
+	// clr(); //clear the background
+	background(0);
+	blendMode(LIGHTEST);
 
 	image(ts.tile.imgList[0],0,0);
 
