@@ -138,6 +138,7 @@ class Cluster {
 // Tile class - holds tiles of a certain form, in different states (history or animation frames)
 // NEW version with plain array (30 frames of memory)
 class Tile {
+	TileGenerator tg; // tile generator belongs to the tile
 	PGraphics[] imgList;
 	int wd, ht; // derived from PImage
 	int mode; // image generator mode
@@ -150,6 +151,7 @@ class Tile {
 		for (int i = 0; i < imgList.length; ++i) {
 			imgList[i] = createGraphics(wd, ht, P3D);
 		}
+		tg = new TileGenerator(mask,0);
 		currentFrame = 0; // start current frame at 0
 		imgList[currentFrame] = tg.generate();
 	}
