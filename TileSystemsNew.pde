@@ -1,19 +1,22 @@
 // ********************************************************************************************************************
-// New Tile Systems - class to hold one Tile (with its history) and manage metadata for everything else
+// New Tile Systems - class to hold one Tile (with its history) and manage metadata for everything else.
+// retaining the Tile class to allow for more tiles in one system in the future.
 
 class TileSystemNew {
 
-	PImage tileMask; // fill with mask
-	int tileHeight, tileWidth; // derived from tile mask
+	int tileHeight, tileWidth; // derived from tile mask, via the Tile class
 	TileGenerator tg; // we have to have a tile generator
 	Tile tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
 	float[][] tiling; // transformation data for tiling out clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
-	float hStep, vStep, hOffset, vOffset, hOffsetPeriod, vOffsetPeriod; // how far to step when tiling the plane
-	Cluster[][] clusterArray; // the array, w x h, of the field of tiles
+	float hStep, vStep, hOffset, vOffset, hOffsetPeriod, vOffsetPeriod; // transformations needed to fill field, pulled from tiling[][]
+	float[][] tileArray; // all the metadata to display tiles!
 
+	//to be deleted:
+	Cluster[][] clusterArray; 
+	PImage tileMask; 
 
 	TileSystemNew(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
@@ -135,8 +138,8 @@ class ClusterNew {
 	}
 }
 
-// Tile class - holds tiles of a certain form, in different states (history or animation frames)
-// NEW version with plain array (30 frames of memory)
+// Tile class - holds tiles of a certain deisgn mode, in different states (history or animation frames)
+// (30 frames of memory)
 class TileNew {
 	TileGenerator tg; // tile generator belongs to the tile
 	PGraphics[] imgList;

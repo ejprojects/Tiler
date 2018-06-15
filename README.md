@@ -18,4 +18,8 @@ Starting fresh with a modular tile method
 2018-06-14:	Done. Putting TileGenerator inside TileSystem, add multiple TileSystems to see interference
 ---- 
 2018-06-14:	Attempting to build the Tile System better, with one Tile object and lots of metadtata used in displaying the field.
+			- combine Tile and TileGrenerator into one class (its own tab)
+			- use cluster and tiling math to fill the data array in TileSystem
+			- make TileSystem.display() function
+			- (detect changed tiles?)
 
