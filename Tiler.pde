@@ -1,7 +1,7 @@
 PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mask for image generator testing
 // TileGenerator tg;			// declare tile generator - needs to be part of tile system
-TileSystem ts, ts2;				// declare ts as a Tile System
+TileSystem ts1, ts2;				// declare ts as a Tile System
 float testScale = 0.25;		// scale for testing tile systems, adjusted with mouse wheel
 
 // ********************************************************************************************************************
@@ -22,8 +22,7 @@ void setup(){
 	tileImg0 = loadImage("tile-test.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
-	// tg = new TileGenerator(mask,0); // test mask, test mode
-	ts = new TileSystem(mask,symmetry12M,tiling12M,3,9);
+	ts1 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
 	ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
 
 }
@@ -40,13 +39,13 @@ void draw(){
 	pushMatrix();
 	translate(mouseX, mouseY); // work at the mouse location
 	scale(testScale);
-	ts.display();
+	ts1.display();
 	popMatrix();
 
 	pushMatrix();
 	translate(width/2, height/2); // work at the center
 	scale(0.5);
-	rotate(3*PI/180);
+	rotate(PI*millis()/10000);
 	ts2.display();
 	popMatrix();
 
@@ -62,9 +61,8 @@ void clr() {
 	rect(0,0,width,height);
 }
 void mousePressed() {
-	// ts.update(); //can i use . syntax to go direct to Tile?
 	println("mouse 1");
-	println("ts.tile.wd: "+ts.tile.wd+" ts.tile.ht: "+ts.tile.ht);
+	println("ts1.tile.tileWidth: "+ts1.tile.tileWidth+" ts1.tile.tileHeight: "+ts1.tile.tileHeight);
 }
 void mouseReleased() {
 	// ts.choose(0);
