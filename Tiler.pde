@@ -46,7 +46,7 @@ void draw(){
 	pushMatrix();
 	translate(width/2, height/2); // work at the center
 	scale(0.5);
-	rotate(3*PI/180);
+	rotate(PI*millis()/10000);
 	ts2.display();
 	popMatrix();
 

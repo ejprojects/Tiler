@@ -1,7 +1,7 @@
 // ********************************************************************************************************************
-// Tile Systems - class to hold the full array of tile clusters based on a certain tile shape, symmetry system, and desired field
+// New Tile Systems - class to hold one Tile (with its history) and manage metadata for everything else
 
-class TileSystem {
+class TileSystemNew {
 
 	PImage tileMask; // fill with mask
 	int tileHeight, tileWidth; // derived from tile mask
@@ -15,7 +15,7 @@ class TileSystem {
 	Cluster[][] clusterArray; // the array, w x h, of the field of tiles
 
 
-	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
+	TileSystemNew(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
 		tileMask = tileMask_;
 		tileWidth = tileMask.width;
@@ -73,13 +73,13 @@ class TileSystem {
 }
 
 // cluster class - to hold repeatable tiling units
-class Cluster {
+class ClusterNew {
 	PGraphics cluster;
 	float wd, ht;
 	Tile tile;
 	float[][] symmetry;
 
-	Cluster (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
+	ClusterNew (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
 		tile = tile_;
 		symmetry = symmetry_;
 		wd = clusterWidth_; 
@@ -137,14 +137,14 @@ class Cluster {
 
 // Tile class - holds tiles of a certain form, in different states (history or animation frames)
 // NEW version with plain array (30 frames of memory)
-class Tile {
+class TileNew {
 	TileGenerator tg; // tile generator belongs to the tile
 	PGraphics[] imgList;
 	int wd, ht; // derived from PImage
 	int mode; // image generator mode
 	int currentFrame; // points to the current frame
 
-	Tile (int wd_, int ht_) {
+	TileNew (int wd_, int ht_) {
 		wd = wd_;
 		ht = ht_;
 		imgList = new PGraphics[30];
@@ -173,6 +173,3 @@ class Tile {
 		return(imgList[offsetFrame]);
 	}
 }
-
-
-
