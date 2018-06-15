@@ -5,29 +5,33 @@
 class TileSystemNew {
 
 	int tileHeight, tileWidth; // derived from tile mask, via the Tile class
-	TileGenerator tg; // we have to have a tile generator
-	Tile tile; // a tile object, to be filled with generated graphics
+	TileNew tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
 	float[][] tiling; // transformation data for tiling out clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
 	float hStep, vStep, hOffset, vOffset, hOffsetPeriod, vOffsetPeriod; // transformations needed to fill field, pulled from tiling[][]
-	float[][] tileArray; // all the metadata to display tiles!
+
+	// adding:
+	Cell[] cellArray; // all the metadata to display tiles in different ways!
 
 	//to be deleted:
-	Cluster[][] clusterArray; 
+	// Cluster[][] clusterArray; 
 	PImage tileMask; 
 
 	TileSystemNew(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
+
 		tileMask = tileMask_;
 		tileWidth = tileMask.width;
 		tileHeight = tileMask.height;
-		tile = new Tile(tileWidth,tileHeight);
+		tile = new TileNew(tileMask,0);
 		clustersWide = clustersWide_;
 		clustersHigh = clustersHigh_;
+
 		symmetry = symmetry_;
 		tiling = tiling_;
+
 		clusterWidth = tiling[0][0];
 		clusterHeight = tiling[1][0];
 		hStep = tiling[0][1] * clusterWidth;
@@ -37,11 +41,21 @@ class TileSystemNew {
 		vOffset = tiling[1][2] * clusterHeight;
 		vOffsetPeriod = tiling[1][3];
 
+		cellArray = new Cell[symmetry[0].length*clustersHigh*clustersWide]; // total number of cells
 
-		clusterArray = new Cluster[clustersWide][clustersHigh];
+		// initial fill of the cell array:
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
-			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-				clusterArray[x][y] = new Cluster(tile,symmetry,clusterWidth,clusterHeight);
+			for (int x = 0; x < clustersWide; ++x) { // loop thorough symmetry clusters on each row (step through width)
+				for (int s = 0; s < symmetry[0].length; ++s) { // loop through symmetry count
+
+					float xLoc, yLoc, angle, flip; // read and calculate cell attributes
+					angle = symmetry[0][s]; // read from symmetry data
+					flip = symmetry[1][s]; // read from symmetry data
+					xLoc = symmetry[2][s] + (hStep/-2)*(clustersWide-1); //... ??? calculating translation
+					yLoc = symmetry[3][s] + (vStep/-2)*(clustersHigh-1); //... ??? to tile out the field, 0 center
+
+					cellArray[y+x+s] = new Cell(xLoc, yLoc, angle, flip);
+				}
 			}
 		}
 	}
@@ -52,14 +66,14 @@ class TileSystemNew {
 		pushMatrix();
 		translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
 
-		clusterArray[0][0].update();
+		// clusterArray[0][0].update();
 
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
 				pushMatrix();
 				translate((float(x)*hStep)+((y%hOffsetPeriod)*hOffset), (float(y)*vStep)+((x%vOffsetPeriod)*vOffset));
 				// clusterArray[x][y].update(); // don't update each cluster each time?
-				clusterArray[0][0].display();
+				// clusterArray[0][0].display();
 				popMatrix();
 			}
 		}
@@ -69,110 +83,88 @@ class TileSystemNew {
 	void choose(int tileIndex) {
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-				clusterArray[x][y].choose(tileIndex);
+				// clusterArray[x][y].choose(tileIndex);
 			}
 		}		
 	}
 }
 
 // cluster class - to hold repeatable tiling units
-class ClusterNew {
-	PGraphics cluster;
-	float wd, ht;
-	Tile tile;
-	float[][] symmetry;
+// class ClusterNew {
+// 	PGraphics cluster;
+// 	float wd, ht;
+// 	Tile tile;
+// 	float[][] symmetry;
 
-	ClusterNew (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
-		tile = tile_;
-		symmetry = symmetry_;
-		wd = clusterWidth_; 
-		ht = clusterHeight_;
-		cluster = createGraphics(round(wd),round(ht),P3D); // create the PGraphics
+// 	ClusterNew (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
+// 		tile = tile_;
+// 		symmetry = symmetry_;
+// 		wd = clusterWidth_; 
+// 		ht = clusterHeight_;
+// 		cluster = createGraphics(round(wd),round(ht),P3D); // create the PGraphics
 
-		choose(0); // constructor makes use of 'choose' function below to initialize.
+// 		choose(0); // constructor makes use of 'choose' function below to initialize.
 
-	}
+// 	}
 
-	void update() {
-		tile.update();
+// 	void update() {
+// 		tile.update();
 
-		cluster.beginDraw();
-		cluster.clear(); // makes the backroud transparent
-		cluster.blendMode(ADD); // allow for overlap, if any
-		cluster.translate(wd/2, ht/2); // translate to the center
+// 		cluster.beginDraw();
+// 		cluster.clear(); // makes the backroud transparent
+// 		cluster.blendMode(ADD); // allow for overlap, if any
+// 		cluster.translate(wd/2, ht/2); // translate to the center
 
-		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
-			cluster.hint(DISABLE_DEPTH_TEST);
-			cluster.pushMatrix();
-			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
-			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
-			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
-			cluster.image(tile.imgList[tile.currentFrame], 0, 0, tile.wd, tile.ht); // place it
-			cluster.popMatrix();
-		}
+// 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
+// 			cluster.hint(DISABLE_DEPTH_TEST);
+// 			cluster.pushMatrix();
+// 			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
+// 			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+// 			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
+// 			cluster.image(tile.imgList[tile.currentFrame], 0, 0, tile.wd, tile.ht); // place it
+// 			cluster.popMatrix();
+// 		}
 
-		cluster.endDraw();
-	}
+// 		cluster.endDraw();
+// 	}
 
-	void choose(int tileIndex) {
+// 	void choose(int tileIndex) {
 
-		cluster.beginDraw();
-		// cluster.blendMode(ADD);
-		cluster.translate(wd/2, ht/2); // translate to the center
+// 		cluster.beginDraw();
+// 		// cluster.blendMode(ADD);
+// 		cluster.translate(wd/2, ht/2); // translate to the center
 
-		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
-			cluster.hint(DISABLE_DEPTH_TEST);
-			cluster.pushMatrix();
-			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
-			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
-			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
-			cluster.image(tile.imgList[tileIndex], 0, 0, tile.wd, tile.ht); // place it
-			cluster.popMatrix();
-		}
+// 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
+// 			cluster.hint(DISABLE_DEPTH_TEST);
+// 			cluster.pushMatrix();
+// 			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
+// 			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+// 			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
+// 			cluster.image(tile.imgList[tileIndex], 0, 0, tile.wd, tile.ht); // place it
+// 			cluster.popMatrix();
+// 		}
 
-		cluster.endDraw();
-	}
+// 		cluster.endDraw();
+// 	}
 
-	void display() { // unused
-		image(cluster,-wd/2,-ht/2); // always display from center point
-	}
-}
+// 	void display() { // unused
+// 		image(cluster,-wd/2,-ht/2); // always display from center point
+// 	}
+// }
 
-// Tile class - holds tiles of a certain deisgn mode, in different states (history or animation frames)
-// (30 frames of memory)
-class TileNew {
-	TileGenerator tg; // tile generator belongs to the tile
-	PGraphics[] imgList;
-	int wd, ht; // derived from PImage
-	int mode; // image generator mode
-	int currentFrame; // points to the current frame
+class Cell {
+	float xLoc,yLoc,angle,flip; // cell origin x, y and rotation a, flip f
+	int timeShift; // how many frames back are we looking?
+	// later add scale, transparency or mask,
+	// and a screen x-y location
 
-	TileNew (int wd_, int ht_) {
-		wd = wd_;
-		ht = ht_;
-		imgList = new PGraphics[30];
-		for (int i = 0; i < imgList.length; ++i) {
-			imgList[i] = createGraphics(wd, ht, P3D);
-		}
-		tg = new TileGenerator(mask,0);
-		currentFrame = 0; // start current frame at 0
-		imgList[currentFrame] = tg.generate();
-	}
-
-	void update() {
-		currentFrame++;
-		if (currentFrame >= imgList.length) {
-			currentFrame = 0;
-		}
-		imgList[currentFrame] = tg.generate();
+	Cell(float xLoc_, float yLoc_, float angle_, float flip_) {
+		xLoc = xLoc_;
+		yLoc = yLoc_;
+		angle = angle_;
+		flip = flip_;
+		timeShift = 0; // redundantly
 
 	}
 
-	PGraphics choose(int offset) {
-		int offsetFrame = (currentFrame - offset);
-		if (offsetFrame < 0) {
-			offsetFrame += imgList.length;
-		}
-		return(imgList[offsetFrame]);
-	}
 }
