@@ -12,8 +12,7 @@ class Tile {
 	int currentFrame; // points to the current frame
 
 
-	Tile
-(PImage mask_, int mode_) {
+	Tile (PImage mask_, int mode_) {
 		mask = mask_;
 		mode = mode_;
 		tileWidth = mask.width;
@@ -57,12 +56,12 @@ class Tile {
 		generateTile(imgList[currentFrame]);
 
 	}
-	void displayTile(int offset) {
+	void displayTile(int offset, float x, float y) {
 		int offsetFrame = (currentFrame - offset);
 		if (offsetFrame < 0) {
 			offsetFrame += imgList.length;
 		}
-		image(imgList[offsetFrame],0,0);
+		image(imgList[offsetFrame],x,y);
 	}
 
 

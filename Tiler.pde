@@ -22,7 +22,7 @@ void setup(){
 	tileImg0 = loadImage("tile-test.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
-	ts1 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
+	ts1 = new TileSystem(mask,symmetry12M,tiling12M,10,30);
 	ts1.setHistory();
 	ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
 	ts2.setHistory();
