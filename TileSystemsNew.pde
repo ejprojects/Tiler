@@ -51,8 +51,14 @@ class TileSystemNew {
 					float xLoc, yLoc, angle, flip; // read and calculate cell attributes
 					angle = symmetry[0][s]; // read from symmetry data
 					flip = symmetry[1][s]; // read from symmetry data
-					xLoc = symmetry[2][s] + (hStep/-2)*(clustersWide-1); //... ??? calculating translation
-					yLoc = symmetry[3][s] + (vStep/-2)*(clustersHigh-1); //... ??? to tile out the field, 0 center
+
+					xLoc = symmetry[2][s] // cell translation from symmetry data
+					+ (hStep/-2)*(clustersWide-1) // plus translation to get us center oriented
+					+ (float(x)*hStep)+((y%hOffsetPeriod)*hOffset); // plus tiling step data
+
+					yLoc = symmetry[3][s] // cell translation from symmetry data
+					+ (vStep/-2)*(clustersHigh-1) // plus translation to get us center oriented
+					+ (float(y)*vStep)+((x%vOffsetPeriod)*vOffset); // plus tiling step data
 
 					cellArray[y+x+s] = new Cell(xLoc, yLoc, angle, flip);
 				}
@@ -61,33 +67,61 @@ class TileSystemNew {
 	}
 
 	void display() {
-		// println("tile.choose(0): "+tile.choose(0));
 
 		pushMatrix();
-		translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
 
-		// clusterArray[0][0].update();
-
-		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
-			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-				pushMatrix();
-				translate((float(x)*hStep)+((y%hOffsetPeriod)*hOffset), (float(y)*vStep)+((x%vOffsetPeriod)*vOffset));
-				// clusterArray[x][y].update(); // don't update each cluster each time?
-				// clusterArray[0][0].display();
-				popMatrix();
-			}
+		for (int i = 0; i < cellArray.length; ++i) { // cycle through all cells
+			pushMatrix();
+			translate(cellArray[i].xLoc, cellArray[i].yLoc); // translate to xLoc, yLoc
+			rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+			rotate(cellArray[i].angle); // rotate in plane
+			tile.displayTile(cellArray[i].timeShift);
+			popMatrix();
 		}
-		popMatrix();
-	}
 
-	void choose(int tileIndex) {
-		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
-			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-				// clusterArray[x][y].choose(tileIndex);
-			}
-		}		
+		popMatrix();
+		// translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
+
+		// // clusterArray[0][0].update();
+
+		// for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
+		// 	for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
+		// 		pushMatrix();
+		// 		translate((float(x)*hStep)+((y%hOffsetPeriod)*hOffset), (float(y)*vStep)+((x%vOffsetPeriod)*vOffset));
+		// 		// clusterArray[x][y].update(); // don't update each cluster each time?
+		// 		// clusterArray[0][0].display();
+		// 		popMatrix();
+		// 	}
+		// }
 	}
 }
+
+
+class Cell {
+	float xLoc,yLoc,angle,flip; // cell origin x, y and rotation a, flip f
+	int timeShift; // how many frames back are we looking?
+	// later add scale, transparency or mask,
+	// and a screen x-y location
+
+	Cell(float xLoc_, float yLoc_, float angle_, float flip_) {
+		xLoc = xLoc_;
+		yLoc = yLoc_;
+		angle = angle_;
+		flip = flip_;
+		timeShift = 0; // redundantly
+
+	}
+
+}
+
+// 	void choose(int tileIndex) {
+// 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
+// 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
+// 				// clusterArray[x][y].choose(tileIndex);
+// 			}
+// 		}		
+// 	}
+// }
 
 // cluster class - to hold repeatable tiling units
 // class ClusterNew {
@@ -152,19 +186,3 @@ class TileSystemNew {
 // 	}
 // }
 
-class Cell {
-	float xLoc,yLoc,angle,flip; // cell origin x, y and rotation a, flip f
-	int timeShift; // how many frames back are we looking?
-	// later add scale, transparency or mask,
-	// and a screen x-y location
-
-	Cell(float xLoc_, float yLoc_, float angle_, float flip_) {
-		xLoc = xLoc_;
-		yLoc = yLoc_;
-		angle = angle_;
-		flip = flip_;
-		timeShift = 0; // redundantly
-
-	}
-
-}

@@ -2,6 +2,7 @@ PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mask for image generator testing
 // TileGenerator tg;			// declare tile generator - needs to be part of tile system
 TileSystem ts, ts2;				// declare ts as a Tile System
+TileSystemNew tsn;
 float testScale = 0.25;		// scale for testing tile systems, adjusted with mouse wheel
 
 // ********************************************************************************************************************
@@ -25,6 +26,7 @@ void setup(){
 	// tg = new TileGenerator(mask,0); // test mask, test mode
 	ts = new TileSystem(mask,symmetry12M,tiling12M,3,9);
 	ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
+	tsn = new TileSystemNew(mask,symmetry12M,tiling12M,3,9);
 
 }
 
