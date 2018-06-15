@@ -42,7 +42,8 @@ void draw(){
 	pushMatrix();
 	translate(mouseX, mouseY); // work at the mouse location
 	scale(testScale);
-	ts.display();
+	// ts.display();
+	tsn.display();
 	popMatrix();
 
 	pushMatrix();

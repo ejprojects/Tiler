@@ -11,13 +11,10 @@ class TileSystemNew {
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
 	float hStep, vStep, hOffset, vOffset, hOffsetPeriod, vOffsetPeriod; // transformations needed to fill field, pulled from tiling[][]
+	PImage tileMask; 
 
-	// adding:
 	Cell[] cellArray; // all the metadata to display tiles in different ways!
 
-	//to be deleted:
-	// Cluster[][] clusterArray; 
-	PImage tileMask; 
 
 	TileSystemNew(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
@@ -60,7 +57,8 @@ class TileSystemNew {
 					+ (vStep/-2)*(clustersHigh-1) // plus translation to get us center oriented
 					+ (float(y)*vStep)+((x%vOffsetPeriod)*vOffset); // plus tiling step data
 
-					cellArray[y+x+s] = new Cell(xLoc, yLoc, angle, flip);
+					cellArray[y*clustersWide*symmetry[0].length+x*symmetry[0].length+s] = new Cell(xLoc, yLoc, angle, flip);
+					println("y*clustersWide*symmetry[0].length+x*symmetry[0].length+s: ",(y*clustersWide*symmetry[0].length+x*symmetry[0].length+s));
 				}
 			}
 		}
@@ -73,26 +71,13 @@ class TileSystemNew {
 		for (int i = 0; i < cellArray.length; ++i) { // cycle through all cells
 			pushMatrix();
 			translate(cellArray[i].xLoc, cellArray[i].yLoc); // translate to xLoc, yLoc
-			rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
+			rotateY(cellArray[i].flip); // rotate on Y axis to accommodate flip
 			rotate(cellArray[i].angle); // rotate in plane
 			tile.displayTile(cellArray[i].timeShift);
 			popMatrix();
 		}
 
 		popMatrix();
-		// translate((hStep/-2)*(clustersWide-1), (vStep/-2)*(clustersHigh-1)); // we are center oriented, but starting at the top left of our field
-
-		// // clusterArray[0][0].update();
-
-		// for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
-		// 	for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-		// 		pushMatrix();
-		// 		translate((float(x)*hStep)+((y%hOffsetPeriod)*hOffset), (float(y)*vStep)+((x%vOffsetPeriod)*vOffset));
-		// 		// clusterArray[x][y].update(); // don't update each cluster each time?
-		// 		// clusterArray[0][0].display();
-		// 		popMatrix();
-		// 	}
-		// }
 	}
 }
 
@@ -113,76 +98,4 @@ class Cell {
 	}
 
 }
-
-// 	void choose(int tileIndex) {
-// 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
-// 			for (int x = 0; x < clustersWide; ++x) { // loop thorough clusters on each row (step through width)
-// 				// clusterArray[x][y].choose(tileIndex);
-// 			}
-// 		}		
-// 	}
-// }
-
-// cluster class - to hold repeatable tiling units
-// class ClusterNew {
-// 	PGraphics cluster;
-// 	float wd, ht;
-// 	Tile tile;
-// 	float[][] symmetry;
-
-// 	ClusterNew (Tile tile_, float[][] symmetry_, float clusterWidth_, float clusterHeight_) {
-// 		tile = tile_;
-// 		symmetry = symmetry_;
-// 		wd = clusterWidth_; 
-// 		ht = clusterHeight_;
-// 		cluster = createGraphics(round(wd),round(ht),P3D); // create the PGraphics
-
-// 		choose(0); // constructor makes use of 'choose' function below to initialize.
-
-// 	}
-
-// 	void update() {
-// 		tile.update();
-
-// 		cluster.beginDraw();
-// 		cluster.clear(); // makes the backroud transparent
-// 		cluster.blendMode(ADD); // allow for overlap, if any
-// 		cluster.translate(wd/2, ht/2); // translate to the center
-
-// 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
-// 			cluster.hint(DISABLE_DEPTH_TEST);
-// 			cluster.pushMatrix();
-// 			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
-// 			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
-// 			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
-// 			cluster.image(tile.imgList[tile.currentFrame], 0, 0, tile.wd, tile.ht); // place it
-// 			cluster.popMatrix();
-// 		}
-
-// 		cluster.endDraw();
-// 	}
-
-// 	void choose(int tileIndex) {
-
-// 		cluster.beginDraw();
-// 		// cluster.blendMode(ADD);
-// 		cluster.translate(wd/2, ht/2); // translate to the center
-
-// 		for (int i = 0; i < symmetry[0].length; ++i) { //cycle through the symmetry data (develop this)
-// 			cluster.hint(DISABLE_DEPTH_TEST);
-// 			cluster.pushMatrix();
-// 			cluster.translate(symmetry[2][i], symmetry[3][i]); // translate for placement
-// 			cluster.rotateY(symmetry[1][i]); // rotate on Y axis to accommodate flip
-// 			cluster.rotate(symmetry[0][i]); // rotate the prescribed amount
-// 			cluster.image(tile.imgList[tileIndex], 0, 0, tile.wd, tile.ht); // place it
-// 			cluster.popMatrix();
-// 		}
-
-// 		cluster.endDraw();
-// 	}
-
-// 	void display() { // unused
-// 		image(cluster,-wd/2,-ht/2); // always display from center point
-// 	}
-// }
 
