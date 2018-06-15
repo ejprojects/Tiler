@@ -80,6 +80,32 @@ class TileSystem {
 
 		popMatrix();
 	}
+
+	// Radial History- set the tiles' timeShift to maximize with distance from center
+	void setHistory() {
+		float maxX = 0;
+		float maxY = 0;
+		PVector maxDist;
+
+		//find the maximum xLoc and Yloc values (better to use center of tile.. Later)
+		//also better to use vecor magnitude... also Later
+		for (int i = 0; i < cellArray.length; ++i) {
+			if(abs(cellArray[i].xLoc)>maxX) {
+				maxX = abs(cellArray[i].xLoc);
+			}
+			if(abs(cellArray[i].yLoc)>maxY) {
+				maxY = abs(cellArray[i].yLoc);
+			}	
+		}
+		
+		maxDist = new PVector(maxX,maxY);
+
+		for (int i = 0; i < cellArray.length; ++i) {
+			PVector iDist = new PVector(cellArray[i].xLoc,cellArray[i].yLoc);
+			cellArray[i].timeShift=int(map(iDist.mag()/maxDist.mag(),0,1,0,29));
+			
+		}
+	}
 }
 
 

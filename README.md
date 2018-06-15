@@ -24,6 +24,6 @@ Starting fresh with a modular tile method
 			- later. (detect changed tiles?)
 2018-06-15:	Done. Tidying up the above steps.
 ----
-2018-06-15:	Tile History Basics: make the tiles' hisory state proportional to distance from center.
+2018-06-15:	Done. Tile History Basics: make the tiles' hisory state proportional to distance from center.
 
 
