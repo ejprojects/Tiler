@@ -16,3 +16,6 @@ Starting fresh with a modular tile method
 			Need to fix Symmetry stepping routines
 2018-06-14:	Done. Created Tiling[][] variable to describe stepping and offsets, scalable. 
 2018-06-14:	Done. Putting TileGenerator inside TileSystem, add multiple TileSystems to see interference
+---- 
+2018-06-14:	Attempting to build the Tile System better, with one Tile object and lots of metadtata used in displaying the field.
+
