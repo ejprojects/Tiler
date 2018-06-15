@@ -2,10 +2,10 @@
 // New Tile Systems - class to hold one Tile (with its history) and manage metadata for everything else.
 // retaining the Tile class to allow for more tiles in one system in the future.
 
-class TileSystemNew {
+class TileSystem {
 
 	int tileHeight, tileWidth; // derived from tile mask, via the Tile class
-	TileNew tile; // a tile object, to be filled with generated graphics
+	Tile tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
 	float[][] tiling; // transformation data for tiling out clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
@@ -16,13 +16,13 @@ class TileSystemNew {
 	Cell[] cellArray; // all the metadata to display tiles in different ways!
 
 
-	TileSystemNew(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
+	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
 
 		tileMask = tileMask_;
 		tileWidth = tileMask.width;
 		tileHeight = tileMask.height;
-		tile = new TileNew(tileMask,0);
+		tile = new Tile(tileMask,0);
 		clustersWide = clustersWide_;
 		clustersHigh = clustersHigh_;
 
@@ -58,13 +58,14 @@ class TileSystemNew {
 					+ (float(y)*vStep)+((x%vOffsetPeriod)*vOffset); // plus tiling step data
 
 					cellArray[y*clustersWide*symmetry[0].length+x*symmetry[0].length+s] = new Cell(xLoc, yLoc, angle, flip);
-					println("y*clustersWide*symmetry[0].length+x*symmetry[0].length+s: ",(y*clustersWide*symmetry[0].length+x*symmetry[0].length+s));
 				}
 			}
 		}
 	}
 
 	void display() {
+
+		tile.updateTile();
 
 		pushMatrix();
 
