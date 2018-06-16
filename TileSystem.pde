@@ -1,10 +1,10 @@
 // ********************************************************************************************************************
-// New Tile Systems - class to hold one Tile (with its history) and manage metadata for everything else.
-// retaining the Tile class to allow for more tiles in one system in the future.
+// Tile System - class to hold one Tile (with its history) and manage metadata for everything else.
+// using a separate Tile class to allow for more tiles in one system in the future.
 
 class TileSystem {
 
-	int tileHeight, tileWidth; // derived from tile mask, via the Tile class
+	int tileHeight, tileWidth; // to be derived from tile mask, via the Tile class
 	Tile tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
 	int tileCount; // how many tiles per cluster
@@ -94,6 +94,7 @@ class TileSystem {
 			translate(cellArray[i].xLoc, cellArray[i].yLoc); // translate to xLoc, yLoc
 			rotate(cellArray[i].angle); // rotate in plane
 			rotateY(cellArray[i].flip); // rotate on Y axis to accommodate flip
+			// tile.displayTileTest(cellArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
 			tile.displayTile(cellArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
 			popMatrix();
 		}
