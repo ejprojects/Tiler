@@ -26,5 +26,6 @@ Starting fresh with a modular tile method
 ----
 2018-06-15:	Done. Tile History Basics: make the tiles' history state proportional to distance from center.
 2018-06-15:	Done. Fixed centering calculation for tile field.
+2018-06-15: Make tile locations and drawing relative to center of tile.
 
 

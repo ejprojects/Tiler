@@ -12,8 +12,8 @@ class TileSystem {
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
 	float 	hStep, vStep, hOffset, vOffset,
-			hOffsetPeriod, vOffsetPeriod,
-			centerX, centerY; // transformations needed to fill field, pulled from tiling[][]
+			hOffsetPeriod, vOffsetPeriod;
+	PVector centroid, centroidMod; // 
 	PImage tileMask; 
 
 	Cell[] cellArray; // all the metadata to display tiles in different ways!
@@ -40,31 +40,37 @@ class TileSystem {
 		hOffsetPeriod = tiling[0][3];
 		vOffset = tiling[1][2] * clusterHeight;
 		vOffsetPeriod = tiling[1][3];
-		centerX = tiling[0][4];
-		centerY = tiling[1][4];
+		centroid = new PVector(tiling[0][4],tiling[1][4]);
+		centroidMod = new PVector(0,0);
 
 		cellArray = new Cell[tileCount*clustersHigh*clustersWide]; // total number of cells
 
 		// initial fill of the cell array:
+		float xLoc, yLoc, angle, flip; // for storage and calculation of cell attributes
 		for (int y = 0; y < clustersHigh; ++y) { // loop through horizontal rows (step though height)
 			for (int x = 0; x < clustersWide; ++x) { // loop thorough symmetry clusters on each row (step through width)
 				for (int s = 0; s < tileCount; ++s) { // loop through symmetry count
 
-					float xLoc, yLoc, angle, flip; // read and calculate cell attributes
 					angle = symmetry[0][s]; // read from symmetry data
 					flip = symmetry[1][s]; // read from symmetry data
 
-					xLoc = symmetry[2][s] // cell translation from symmetry data
-					+ (hStep/-2)*(clustersWide-1) // plus translation to get us center oriented
-					+ (float(x)*hStep)+((y%hOffsetPeriod)*hOffset); // plus tiling step data
+					centroidMod.set(centroid.x*cos(flip),centroid.y);
+					centroidMod.rotate(angle);
+					// println("centroid: "+centroid+" -- centroidMod: "+centroidMod);
+
+					xLoc = symmetry[2][s]; // cell translation from symmetry data
+					xLoc += centroidMod.x; // offset to draw tile from its center 
+					xLoc += (hStep/-2)*(clustersWide-1); // plus translation to get us center oriented
+					xLoc += (float(x)*hStep)+((y%hOffsetPeriod)*hOffset); // plus tiling step data
 
 					if (hOffsetPeriod>1) { // account for tiling offset in centering the field
 						xLoc += min(clustersHigh-1,hOffsetPeriod-1)*hOffset/-2;
 					}
 
-					yLoc = symmetry[3][s] // cell translation from symmetry data
-					+ (vStep/-2)*(clustersHigh-1) // plus translation to get us center oriented
-					+ (float(y)*vStep)+((x%vOffsetPeriod)*vOffset); // plus tiling step data
+					yLoc = symmetry[3][s]; // cell translation from symmetry data
+					yLoc += centroidMod.y; // offset to draw tile from its center 
+					yLoc += (vStep/-2)*(clustersHigh-1); // plus translation to get us center oriented
+					yLoc += (float(y)*vStep)+((x%vOffsetPeriod)*vOffset); // plus tiling step data
 
 					if (vOffsetPeriod>1) { // account for tiling offset in centering the field
 						yLoc += min(clustersWide-1,vOffsetPeriod-1)*vOffset/-2;
@@ -86,9 +92,9 @@ class TileSystem {
 		for (int i = 0; i < cellArray.length; ++i) { // cycle through all cells
 			pushMatrix();
 			translate(cellArray[i].xLoc, cellArray[i].yLoc); // translate to xLoc, yLoc
-			rotateY(cellArray[i].flip); // rotate on Y axis to accommodate flip
 			rotate(cellArray[i].angle); // rotate in plane
-			tile.displayTile(cellArray[i].timeShift, -centerX, -centerY);
+			rotateY(cellArray[i].flip); // rotate on Y axis to accommodate flip
+			tile.displayTile(cellArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
 			popMatrix();
 		}
 
@@ -116,7 +122,7 @@ class TileSystem {
 
 		for (int i = 0; i < cellArray.length; ++i) {
 			PVector iDist = new PVector(cellArray[i].xLoc,cellArray[i].yLoc);
-			cellArray[i].timeShift=int(map(iDist.mag()/maxDist.mag(),0,1,0,29));
+			cellArray[i].timeShift=int(map(iDist.mag()/maxDist.mag(),0,1,0,history-1));
 			
 		}
 	}
