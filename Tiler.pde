@@ -1,8 +1,8 @@
 PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mask for image generator testing
-// TileGenerator tg;			// declare tile generator - needs to be part of tile system
-TileSystem ts1, ts2;				// declare ts as a Tile System
+TileSystem ts1, ts2;		// declare ts as a Tile System
 float testScale = 0.25;		// scale for testing tile systems, adjusted with mouse wheel
+int history = 90;			// length of tile history
 
 // ********************************************************************************************************************
 void settings() {
@@ -17,13 +17,16 @@ void settings() {
 // ********************************************************************************************************************
 void setup(){
 
+	noCursor();
 	background(0);
 	frameRate(30);
-	tileImg0 = loadImage("tile-test.png"); // tile image for testing
+	tileImg0 = loadImage("tile-test-2.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
-	ts1 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
-	ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
+	ts1 = new TileSystem(mask,symmetry12M,tiling12M,6,18);
+	ts1.setHistory();
+	// ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
+	// ts2.setHistory();
 
 }
 
@@ -42,12 +45,12 @@ void draw(){
 	ts1.display();
 	popMatrix();
 
-	pushMatrix();
-	translate(width/2, height/2); // work at the center
-	scale(0.5);
-	rotate(PI*millis()/10000);
-	ts2.display();
-	popMatrix();
+	// pushMatrix();
+	// translate(width/2, height/2); // work at the center
+	// scale(0.5);
+	// rotate(PI*millis()/10000);
+	// ts2.display();
+	// popMatrix();
 
 
 

@@ -8,12 +8,11 @@ class Tile {
 	PImage mask; //even if it's unmasked, the tile dimensions come from this file
 	int tileWidth, tileHeight; //pulled from the mask file
 	int mode; // selects generative design options
-	PGraphics[] imgList = new PGraphics[30]; // rendering destinations for the generative tile graphics / frames
+	PGraphics[] imgList = new PGraphics[history]; // rendering destinations for the generative tile graphics / frames
 	int currentFrame; // points to the current frame
 
 
-	Tile
-(PImage mask_, int mode_) {
+	Tile (PImage mask_, int mode_) {
 		mask = mask_;
 		mode = mode_;
 		tileWidth = mask.width;
@@ -27,7 +26,7 @@ class Tile {
 	void generateTile(PGraphics frame) { // here we draw to the new tile frame
 
 		frame.beginDraw();
-		frame.strokeWeight(2);
+		frame.strokeWeight(10);
 		frame.stroke(255);
 		frame.noFill();
 		frame.blendMode(ADD);
@@ -57,12 +56,19 @@ class Tile {
 		generateTile(imgList[currentFrame]);
 
 	}
-	void displayTile(int offset) {
+	void displayTile(int offset, float x, float y) {
 		int offsetFrame = (currentFrame - offset);
 		if (offsetFrame < 0) {
 			offsetFrame += imgList.length;
 		}
-		image(imgList[offsetFrame],0,0);
+		image(imgList[offsetFrame],x,y);
+	}
+	void displayTileTest(int offset, float x, float y) {
+		int offsetFrame = (currentFrame - offset);
+		if (offsetFrame < 0) {
+			offsetFrame += imgList.length;
+		}
+		image(tileImg0,x,y);
 	}
 
 

@@ -22,5 +22,10 @@ Starting fresh with a modular tile method
 			- Done. use cluster and tiling math to fill the data array in TileSystem
 			- Done. make TileSystem.display() function
 			- later. (detect changed tiles?)
-2018-06-15:	Tidying up the above steps.
+2018-06-15:	Done. Tidying up the above steps.
+----
+2018-06-15:	Done. Tile History Basics: make the tiles' history state proportional to distance from center.
+2018-06-15:	Done. Fixed centering calculation for tile field.
+2018-06-15: Make tile locations and drawing relative to center of tile.
+
 

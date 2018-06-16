@@ -35,8 +35,8 @@ float[][] symmetry12M = {
 {0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0}			// y translation
 };
 
-float[][] tiling12M = {	{	692.6,	1.5,		0.75,	2	},		// clusterWidth, hStep, hOffset, hOffestPeriod
-						{	600,	0.5,	0,		1	} };	// clusterHeight, vStep, vOffset, vOffestPeriod
+float[][] tiling12M = {	{	692.6,	1.5,	0.75,	2,	57.667	},		// clusterWidth, hStep, hOffset, hOffestPeriod, tileCenterX
+						{	600,	0.5,	0,		1,	200		} };	// clusterHeight, vStep, vOffset, vOffestPeriod, tileCenterY
 
 float[][] symmetry12 = {
 //0		1		2		3		4		5		6		7		8		9		10		11			*/
