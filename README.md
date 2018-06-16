@@ -28,5 +28,5 @@ Starting fresh with a modular tile method
 2018-06-15:	Done. Fixed centering calculation for tile field.
 2018-06-15: Done. Make tile locations and drawing relative to center of tile.
 ----
-2018-06-15: Add screen XY awareness to Cell class
-
+2018-06-15: Done. Add screen XY awareness to Cell class.
+----
