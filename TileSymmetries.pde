@@ -2,9 +2,7 @@
 // tile symmetries
 
 // symmetry variables describe symmetry within repeatable clusters that will tile the plane
-// tiling variables describe the transformations necessary when tilin gout the clusters
-
-
+// tiling variables describe the transformations necessary when tiling out the clusters
 
 float[][] symmetry1 = {	{0},		// rotation
 						{0},		// flip, i.e., rotation on y axis
