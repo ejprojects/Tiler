@@ -37,4 +37,4 @@ Starting fresh with a modular tile method
 			Done - Add toggle to render all tiles or only those on screen, look at CPU savings
 ----
 2018-06-17: Branch - Video Mask
-			- Add a mask to the whole screen
+			Done - Add a mask to the whole screen
