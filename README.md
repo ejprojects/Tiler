@@ -35,3 +35,6 @@ Starting fresh with a modular tile method
 			Done - Add isOnScreen boolean to TileData
 			Done - Figure out how to calculate that
 			Done - Add toggle to render all tiles or only those on screen, look at CPU savings
+----
+2018-06-17: Branch - Video Mask
+			Done - Add a mask to the whole screen
