@@ -36,12 +36,12 @@ class Tile {
 		frame.pushMatrix();
 		frame.translate(tileWidth/4, tileHeight/3);  // make center of rotation inside tile
 		frame.rotate(float(millis())/1000*PI);  // 1/2 rev per second
-		frame.ellipse(0, 0, 250, 125); // arbitrary, small...
+		frame.ellipse(0, 0, 400, 250); // arbitrary, small...
 		frame.popMatrix();
 		frame.pushMatrix();
 		frame.translate(tileWidth/2, 3*tileHeight/4);  // make center of rotation inside tile
 		frame.rotate(float(millis())/1667*PI);  // slower 
-		frame.ellipse(0, 0, 250, 125); // arbitrary, small...
+		frame.ellipse(0, 0, 350, 225); // arbitrary, small...
 		frame.popMatrix();
 		
 		frame.mask(mask); // maybe alter masking later
