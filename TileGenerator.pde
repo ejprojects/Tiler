@@ -3,14 +3,12 @@
 // generate and store tile images with various design modes
 // functions: generate, display (a given frame offset)
 
-
 class Tile {
 	PImage mask; //even if it's unmasked, the tile dimensions come from this file
 	int tileWidth, tileHeight; //pulled from the mask file
 	int mode; // selects generative design options
 	PGraphics[] imgList = new PGraphics[history]; // rendering destinations for the generative tile graphics / frames
 	int currentFrame; // points to the current frame
-
 
 	Tile (PImage mask_, int mode_) {
 		mask = mask_;
@@ -47,7 +45,6 @@ class Tile {
 		frame.mask(mask); // maybe alter masking later
 		frame.endDraw();
 	}
-
 	void updateTile() {
 		currentFrame++;
 		if (currentFrame >= imgList.length) {
@@ -70,8 +67,6 @@ class Tile {
 		}
 		image(tileImg0,x,y);
 	}
-
-
 }
 
 

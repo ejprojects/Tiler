@@ -20,21 +20,21 @@ void setup(){
 
 	noCursor();
 	background(0);
-	frameRate(30);
+	frameRate(24);
 	tileImg0 = loadImage("tile-test-2.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
 	videoMask = loadImage("VideoMaskBW.png"); // test video mask 
-	ts1 = new TileSystem(mask,symmetry12M,tiling12M,12,40);
+	ts1 = new TileSystem(mask,symmetry12M,tiling12M,9,30);
 	ts1.setHistory();
-	// ts2 = new TileSystem(mask,symmetry12M,tiling12M,3,9);
-	// ts2.setHistory();
+	ts2 = new TileSystem(mask,symmetry12M,tiling12M,6,20);
+	ts2.setHistory();
 
 }
 
 // ********************************************************************************************************************
 void draw(){
-	frame.setTitle( int(frameRate) + " FPS" );
+	surface.setTitle( int(frameRate) + " FPS" );
 
 	// clr(); //clear the background
 	background(0);
@@ -51,11 +51,12 @@ void draw(){
 
 	// pushMatrix();
 	// translate(width/2, height/2); // work at the center
-	// scale(0.5);
+	// scale(0.2);
+	// rotate(-PI*millis()/60000);
 	// ts2.display();
 	// popMatrix();
 
-	// test screen coordinates
+	// test screen coordinates - make this a function
 	// fill(255,24,24);
 	// rectMode(CENTER);
 	// for (int i = 0; i < ts1.tileArray.length; ++i) { // cycle through all cells

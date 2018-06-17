@@ -7,17 +7,14 @@ class TileSystem {
 	int tileHeight, tileWidth; // to be derived from tile mask, via the Tile class
 	Tile tile; // a tile object, to be filled with generated graphics
 	float[][] symmetry; // symmetry data for creating clusters
-	int tileCount; // how many tiles per cluster
+	int tileCount; // how many tiles per cluster, pulled from symmetry array
 	float[][] tiling; // transformation data for tiling out clusters
 	float clusterWidth, clusterHeight; // the minimum rectangle that contains a cluster... how to calculate?
 	int clustersWide, clustersHigh; // size of the field
 	float 	hStep, vStep, hOffset, vOffset,
 			hOffsetPeriod, vOffsetPeriod;
-	PVector centroid, centroidMod; // 
-	PImage tileMask; 
-
+	PVector centroid, centroidMod; // 	// PImage tileMask; 
 	TileData[] tileArray; // all the metadata to display tiles in different ways!
-
 
 	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
 		int clustersWide_, int clustersHigh_) {
@@ -96,18 +93,13 @@ class TileSystem {
 			rotateY(tileArray[i].flip); // rotate on Y axis to accommodate flip
 
 			getScreenXY(tileArray[i]); // at the farthest tranbsformation, store the screen x,y
-			// tileArray[i].isOnScreen = 	(tileArray[i].screenX<0 ||
-			// 							tileArray[i].screenX>width ||
-			// 							tileArray[i].screenY<0 ||
-			// 							tileArray[i].screenY>height) ? // test whether tiles will be visible
-			// 							false : true ;
-			setIsOnScreen(tileArray[i], int(200 * testScale));
+			setIsOnScreen(tileArray[i], int(200 * testScale)); // set the isOnScrren flag with margin
+
 			if(tileArray[i].isOnScreen) {
 				tile.displayTile(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
 			}
 			popMatrix();
 		}
-
 		popMatrix();
 	}
 
@@ -147,7 +139,7 @@ class TileSystem {
 	void setIsOnScreen(TileData td, int margin) {
 		td.isOnScreen = 	(td.screenX<0-margin ||
 							td.screenX>width+margin ||
-							td.screenY<00-margin ||
+							td.screenY<0-margin ||
 							td.screenY>height+margin) ?
 		false : true ;
 	}
@@ -172,18 +164,4 @@ class TileData {
 
 }
 
-// get the screen x,y of the prevailing transormation
-// void getScreenXY(TileData td) {
-// 	td.screenX = modelX(0,0,0);
-// 	td.screenY = modelY(0,0,0);
-// }
-
-// // test whether tiles will be visible
-// void setIsOnScreen(TileData td, int margin) {
-// 	td.isOnScreen = 	(td.screenX<0-margin ||
-// 						td.screenX>width+margin ||
-// 						td.screenY<00-margin ||
-// 						td.screenY>height+margin) ?
-// 						false : true ;
-// }
 
