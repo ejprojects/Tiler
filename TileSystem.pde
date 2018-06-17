@@ -136,6 +136,21 @@ class TileSystem {
 			
 		}
 	}
+	// get the screen x,y of the prevailing transormation
+
+	void getScreenXY(TileData td) {
+		td.screenX = modelX(0,0,0);
+		td.screenY = modelY(0,0,0);
+	}
+
+	// test whether tiles will be visible
+	void setIsOnScreen(TileData td, int margin) {
+		td.isOnScreen = 	(td.screenX<0-margin ||
+							td.screenX>width+margin ||
+							td.screenY<00-margin ||
+							td.screenY>height+margin) ?
+		false : true ;
+	}
 }
 
 
@@ -158,17 +173,17 @@ class TileData {
 }
 
 // get the screen x,y of the prevailing transormation
-void getScreenXY(TileData td) {
-	td.screenX = modelX(0,0,0);
-	td.screenY = modelY(0,0,0);
-}
+// void getScreenXY(TileData td) {
+// 	td.screenX = modelX(0,0,0);
+// 	td.screenY = modelY(0,0,0);
+// }
 
-// test whether tiles will be visible
-void setIsOnScreen(TileData td, int margin) {
-	td.isOnScreen = 	(td.screenX<0-margin ||
-						td.screenX>width+margin ||
-						td.screenY<00-margin ||
-						td.screenY>height+margin) ?
-						false : true ;
-}
+// // test whether tiles will be visible
+// void setIsOnScreen(TileData td, int margin) {
+// 	td.isOnScreen = 	(td.screenX<0-margin ||
+// 						td.screenX>width+margin ||
+// 						td.screenY<00-margin ||
+// 						td.screenY>height+margin) ?
+// 						false : true ;
+// }
 
