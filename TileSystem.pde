@@ -16,7 +16,7 @@ class TileSystem {
 	PVector centroid, centroidMod; // 
 	PImage tileMask; 
 
-	TileData[] cellArray; // all the metadata to display tiles in different ways!
+	TileData[] tileArray; // all the metadata to display tiles in different ways!
 
 
 	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
@@ -43,7 +43,7 @@ class TileSystem {
 		centroid = new PVector(tiling[0][4],tiling[1][4]);
 		centroidMod = new PVector(0,0);
 
-		cellArray = new TileData[tileCount*clustersHigh*clustersWide]; // total number of cells
+		tileArray = new TileData[tileCount*clustersHigh*clustersWide]; // total number of cells
 
 		// initial fill of the cell array:
 		float xLoc, yLoc, angle, flip; // for storage and calculation of cell attributes
@@ -77,7 +77,7 @@ class TileSystem {
 					}
 
 
-					cellArray[y*clustersWide*tileCount+x*symmetry[0].length+s] = new TileData(xLoc, yLoc, angle, flip);
+					tileArray[y*clustersWide*tileCount+x*symmetry[0].length+s] = new TileData(xLoc, yLoc, angle, flip);
 				}
 			}
 		}
@@ -89,15 +89,15 @@ class TileSystem {
 
 		pushMatrix();
 
-		for (int i = 0; i < cellArray.length; ++i) { // cycle through all cells
+		for (int i = 0; i < tileArray.length; ++i) { // cycle through all cells
 			pushMatrix();
-			translate(cellArray[i].xLoc, cellArray[i].yLoc); // translate to xLoc, yLoc
-			rotate(cellArray[i].angle); // rotate in plane
-			rotateY(cellArray[i].flip); // rotate on Y axis to accommodate flip
-			// tile.displayTileTest(cellArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
-			tile.displayTile(cellArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
-			cellArray[i].screenX = modelX(0,0,0);
-			cellArray[i].screenY = modelY(0,0,0);
+			translate(tileArray[i].xLoc, tileArray[i].yLoc); // translate to xLoc, yLoc
+			rotate(tileArray[i].angle); // rotate in plane
+			rotateY(tileArray[i].flip); // rotate on Y axis to accommodate flip
+			// tile.displayTileTest(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
+			tile.displayTile(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
+			tileArray[i].screenX = modelX(0,0,0);
+			tileArray[i].screenY = modelY(0,0,0);
 			popMatrix();
 		}
 
@@ -112,20 +112,20 @@ class TileSystem {
 
 		//find the maximum xLoc and Yloc values (better to use center of tile.. Later)
 		//also better to use vecor magnitude... also Later
-		for (int i = 0; i < cellArray.length; ++i) {
-			if(abs(cellArray[i].xLoc)>maxX) {
-				maxX = abs(cellArray[i].xLoc);
+		for (int i = 0; i < tileArray.length; ++i) {
+			if(abs(tileArray[i].xLoc)>maxX) {
+				maxX = abs(tileArray[i].xLoc);
 			}
-			if(abs(cellArray[i].yLoc)>maxY) {
-				maxY = abs(cellArray[i].yLoc);
+			if(abs(tileArray[i].yLoc)>maxY) {
+				maxY = abs(tileArray[i].yLoc);
 			}	
 		}
 		
 		maxDist = new PVector(maxX,maxY);
 
-		for (int i = 0; i < cellArray.length; ++i) {
-			PVector iDist = new PVector(cellArray[i].xLoc,cellArray[i].yLoc);
-			cellArray[i].timeShift=int(map(iDist.mag()/maxDist.mag(),0,1,0,history-1));
+		for (int i = 0; i < tileArray.length; ++i) {
+			PVector iDist = new PVector(tileArray[i].xLoc,tileArray[i].yLoc);
+			tileArray[i].timeShift=int(map(iDist.mag()/maxDist.mag(),0,1,0,history-1));
 			
 		}
 	}

@@ -55,8 +55,8 @@ void draw(){
 	// test screen coordinates
 	fill(255,24,24);
 	rectMode(CENTER);
-	for (int i = 0; i < ts1.cellArray.length; ++i) { // cycle through all cells
-		rect(ts1.cellArray[i].screenX,ts1.cellArray[i].screenY,3,3);
+	for (int i = 0; i < ts1.tileArray.length; ++i) { // cycle through all cells
+		rect(ts1.tileArray[i].screenX,ts1.tileArray[i].screenY,3,3);
 	}
 
 }
