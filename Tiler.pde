@@ -1,8 +1,8 @@
 PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mask for image generator testing
 TileSystem ts1, ts2;		// declare ts as a Tile System
-float testScale = 0.25;		// scale for testing tile systems, adjusted with mouse wheel
-int history = 60;			// length of tile history (minimum 1)
+float testScale = 0.1;		// scale for testing tile systems, adjusted with mouse wheel
+int history = 120;			// length of tile history (minimum 1)
 
 // ********************************************************************************************************************
 void settings() {
