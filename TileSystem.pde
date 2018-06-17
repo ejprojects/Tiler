@@ -16,7 +16,7 @@ class TileSystem {
 	PVector centroid, centroidMod; // 
 	PImage tileMask; 
 
-	Cell[] cellArray; // all the metadata to display tiles in different ways!
+	TileData[] cellArray; // all the metadata to display tiles in different ways!
 
 
 	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
@@ -43,7 +43,7 @@ class TileSystem {
 		centroid = new PVector(tiling[0][4],tiling[1][4]);
 		centroidMod = new PVector(0,0);
 
-		cellArray = new Cell[tileCount*clustersHigh*clustersWide]; // total number of cells
+		cellArray = new TileData[tileCount*clustersHigh*clustersWide]; // total number of cells
 
 		// initial fill of the cell array:
 		float xLoc, yLoc, angle, flip; // for storage and calculation of cell attributes
@@ -77,7 +77,7 @@ class TileSystem {
 					}
 
 
-					cellArray[y*clustersWide*tileCount+x*symmetry[0].length+s] = new Cell(xLoc, yLoc, angle, flip);
+					cellArray[y*clustersWide*tileCount+x*symmetry[0].length+s] = new TileData(xLoc, yLoc, angle, flip);
 				}
 			}
 		}
@@ -132,13 +132,13 @@ class TileSystem {
 }
 
 
-class Cell {
+class TileData {
 	float xLoc,yLoc,angle,flip; // cell center origin x, y and rotation a, flip f
 	float screenX, screenY; // cell center screen coordinates
 	int timeShift; // how many frames back are we looking?
 	// later add scale, transparency or mask,
 
-	Cell(float xLoc_, float yLoc_, float angle_, float flip_) {
+	TileData (float xLoc_, float yLoc_, float angle_, float flip_) {
 		xLoc = xLoc_;
 		yLoc = yLoc_;
 		angle = angle_;

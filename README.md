@@ -31,7 +31,7 @@ Starting fresh with a modular tile method
 2018-06-15: Done. Add screen XY awareness to Cell class.
 ----
 2018-06-17: Branch - On-Screen awareness
-			- Change Cell class to TileData class (name change only)
+			- Change Cell class to TileData class (name change only) (also cellArray to TileArray)
 			- Add isOnScreen boolean to TileData
 			- Figure out how to calculate that
 			- Add toggle to render all tiles or only those on screen, look at CPU savings
