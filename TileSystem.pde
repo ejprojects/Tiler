@@ -94,10 +94,17 @@ class TileSystem {
 			translate(tileArray[i].xLoc, tileArray[i].yLoc); // translate to xLoc, yLoc
 			rotate(tileArray[i].angle); // rotate in plane
 			rotateY(tileArray[i].flip); // rotate on Y axis to accommodate flip
-			// tile.displayTileTest(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
-			tile.displayTile(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
-			tileArray[i].screenX = modelX(0,0,0);
-			tileArray[i].screenY = modelY(0,0,0);
+
+			getScreenXY(tileArray[i]); // at the farthest tranbsformation, store the screen x,y
+			// tileArray[i].isOnScreen = 	(tileArray[i].screenX<0 ||
+			// 							tileArray[i].screenX>width ||
+			// 							tileArray[i].screenY<0 ||
+			// 							tileArray[i].screenY>height) ? // test whether tiles will be visible
+			// 							false : true ;
+			setIsOnScreen(tileArray[i], int(200 * testScale));
+			if(tileArray[i].isOnScreen) {
+				tile.displayTile(tileArray[i].timeShift, -centroid.x, -centroid.y); // draw tile from center
+			}
 			popMatrix();
 		}
 
@@ -135,6 +142,7 @@ class TileSystem {
 class TileData {
 	float xLoc,yLoc,angle,flip; // cell center origin x, y and rotation a, flip f
 	float screenX, screenY; // cell center screen coordinates
+	boolean isOnScreen; // flag cells that could be visible
 	int timeShift; // how many frames back are we looking?
 	// later add scale, transparency or mask,
 
@@ -143,9 +151,24 @@ class TileData {
 		yLoc = yLoc_;
 		angle = angle_;
 		flip = flip_;
-		timeShift = 0; // redundantly
+		// timeShift = 0; // redundantly
 
 	}
 
+}
+
+// get the screen x,y of the prevailing transormation
+void getScreenXY(TileData td) {
+	td.screenX = modelX(0,0,0);
+	td.screenY = modelY(0,0,0);
+}
+
+// test whether tiles will be visible
+void setIsOnScreen(TileData td, int margin) {
+	td.isOnScreen = 	(td.screenX<0-margin ||
+						td.screenX>width+margin ||
+						td.screenY<00-margin ||
+						td.screenY>height+margin) ?
+						false : true ;
 }
 

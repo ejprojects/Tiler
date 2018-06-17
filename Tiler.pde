@@ -1,7 +1,7 @@
 PImage tileImg0, tileImg1;	// two test images, non-generated
 PImage mask;				// mask for image generator testing
 TileSystem ts1, ts2;		// declare ts as a Tile System
-float testScale = 0.1;		// scale for testing tile systems, adjusted with mouse wheel
+float testScale = 0.05;		// scale for testing tile systems, adjusted with mouse wheel
 int history = 120;			// length of tile history (minimum 1)
 
 // ********************************************************************************************************************
@@ -37,7 +37,7 @@ void draw(){
 	background(0);
 	blendMode(ADD);
 
-	ts1.tile.displayTile(0,0,0);
+	// ts1.tile.displayTile(0,0,0);
 
 	pushMatrix();
 	translate(mouseX, mouseY); // work at the mouse location
@@ -53,11 +53,11 @@ void draw(){
 	// popMatrix();
 
 	// test screen coordinates
-	fill(255,24,24);
-	rectMode(CENTER);
-	for (int i = 0; i < ts1.tileArray.length; ++i) { // cycle through all cells
-		rect(ts1.tileArray[i].screenX,ts1.tileArray[i].screenY,3,3);
-	}
+	// fill(255,24,24);
+	// rectMode(CENTER);
+	// for (int i = 0; i < ts1.tileArray.length; ++i) { // cycle through all cells
+	// 	rect(ts1.tileArray[i].screenX,ts1.tileArray[i].screenY,3,3);
+	// }
 
 }
 
