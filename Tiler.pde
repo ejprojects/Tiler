@@ -32,13 +32,24 @@ void setup(){
 	l = myAudioInput.left.get(0);
 	r = myAudioInput.right.get(0);
 
+	// OSC
+	/* create a new instance of OscP5, the second parameter indicates the listening port */
+	osc = new OscP5( this , 12000 ); 
+	/* create a NetAddress which requires the receiver's IP address and port number */
+	receiver = new NetAddress( "127.0.0.1" , 12000 );
+
+	// Syphon
+	server = new SyphonServer(this, "Processing Syphon");
+
+
+
 	noCursor();
 	background(0);
 	frameRate(24);
 	tileImg0 = loadImage("tile-test-2.png"); // tile image for testing
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
-	videoMask = loadImage("VideoMaskBW.png"); // test video mask 
+	videoMask = loadImage("VideoMaskBW.png"); // test video mask
 	ts1 = new TileSystem(mask,symmetry12M,tiling12M,6,20);
 	ts1.setHistory();
 	ts2 = new TileSystem(mask,symmetry12M,tiling12M,6,20);
@@ -50,6 +61,8 @@ void setup(){
 void draw(){
 	surface.setTitle( int(frameRate) + " FPS" );
 
+	cycling(); // auto timer
+
 	l = myAudioInput.left.get(0);
 	r = myAudioInput.right.get(0);
 	strokeW = mapCurve(l,0,1,3,1000,2);
@@ -57,7 +70,7 @@ void draw(){
 	// strokeW = mapCurve(amp.analyze(),0,1,3,1000,2);
 	// strokeW = amp.analyze() * 1000;
 	strokeWeight(strokeW);
-	println("strokeW: "+strokeW);
+	// println("strokeW: "+strokeW);
 
 	// clr(); //clear the background
 	background(0);
@@ -85,8 +98,12 @@ void draw(){
 	// for (int i = 0; i < ts1.tileArray.length; ++i) { // cycle through all cells
 	// 	rect(ts1.tileArray[i].screenX,ts1.tileArray[i].screenY,3,3);
 	// }
-	blendMode(MULTIPLY);
-	image(videoMask,0,0);
+
+	// mask video (use this later)
+	// blendMode(MULTIPLY);
+	// image(videoMask,0,0);
+
+	server.sendScreen();
 }
 
 // ********************************************************************************************************************

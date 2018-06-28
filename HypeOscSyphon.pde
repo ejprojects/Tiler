@@ -26,6 +26,12 @@ OscP5 osc;
 
 NetAddress receiver;
 
+void sendOSC(String addr, int msg) {
+  /* send an OSC message to NetAddress addr */
+  osc.send( receiver , addr , msg);
+  println("sent OSC: ", addr, " ",msg);
+}
+
 // ********************************************************************************************************************
 // ********************************************************************************************************************
 
