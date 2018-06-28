@@ -39,3 +39,4 @@ Starting fresh with a modular tile method
 2018-06-17: Branch - Video Mask
 			Done - Add a mask to the whole screen
 ----
+2018-06-27: Done - Added Minim input
