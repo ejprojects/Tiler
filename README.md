@@ -40,3 +40,4 @@ Starting fresh with a modular tile method
 			Done - Add a mask to the whole screen
 ----
 2018-06-27: Done - Added Minim input
+2018-06-27: Work on communication with Vuo
