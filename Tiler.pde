@@ -20,11 +20,17 @@ void settings() {
 // ********************************************************************************************************************
 void setup(){
 
-	// sound
+	// processing sound
 	amp = new Amplitude(this);
 	in = new AudioIn(this, 0);
 	in.start();
 	amp.input(in);
+
+	// minim
+	minim = new Minim(this);
+	myAudioInput = minim.getLineIn(Minim.STEREO,16);
+	l = myAudioInput.left.get(0);
+	r = myAudioInput.right.get(0);
 
 	noCursor();
 	background(0);
@@ -44,7 +50,12 @@ void setup(){
 void draw(){
 	surface.setTitle( int(frameRate) + " FPS" );
 
-	strokeW = amp.analyze()*1000;
+	l = myAudioInput.left.get(0);
+	r = myAudioInput.right.get(0);
+	strokeW = mapCurve(l,0,1,3,1000,2);
+	// strokeW = mapCurve(r,0,1,3,1000,2);
+	// strokeW = mapCurve(amp.analyze(),0,1,3,1000,2);
+	// strokeW = amp.analyze() * 1000;
 	strokeWeight(strokeW);
 	println("strokeW: "+strokeW);
 
@@ -80,6 +91,10 @@ void draw(){
 
 // ********************************************************************************************************************
 // misellaneous functions
+float mapCurve (float value, float low1, float high1, float low2, float high2, float power) {
+	return(pow(map(value, low1, high1, low2, high2),power));
+}
+
 void clr() {
 	noStroke();
 	fill(48,32);
