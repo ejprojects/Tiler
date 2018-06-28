@@ -17,9 +17,9 @@ class TileSystem {
 	TileData[] tileArray; // all the metadata to display tiles in different ways!
 
 	TileSystem(PImage tileMask_, float[][] symmetry_, float[][] tiling_,
-		int clustersWide_, int clustersHigh_) {
+		int clustersWide_, int clustersHigh_, int mode_) {
 
-		tile = new Tile(tileMask_,0);
+		tile = new Tile(tileMask_,mode_);
 		tileWidth = tile.tileWidth;
 		tileHeight = tile.tileHeight;
 		clustersWide = clustersWide_;

@@ -40,4 +40,7 @@ Starting fresh with a modular tile method
 			Done - Add a mask to the whole screen
 ----
 2018-06-27: Done - Added Minim input
-2018-06-27: Work on communication with Vuo
+2018-06-27: Done - Work on communication with Vuo
+2018-06-27: Working - Better Tile Functions
+			Working - Sound Sensitivity Adjustments
+			Via Touch OSC??
