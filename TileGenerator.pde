@@ -24,7 +24,7 @@ class Tile {
 	void generateTile(PGraphics frame) { // here we draw to the new tile frame
 
 		frame.beginDraw();
-		frame.strokeWeight(10);
+		frame.strokeWeight(strokeW);
 		frame.stroke(255);
 		frame.noFill();
 		frame.blendMode(ADD);
