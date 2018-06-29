@@ -41,6 +41,6 @@ Starting fresh with a modular tile method
 ----
 2018-06-27: Done - Added Minim input
 2018-06-27: Done - Work on communication with Vuo
-2018-06-27: Working - Better Tile Functions
-			Working - Sound Sensitivity Adjustments
+2018-06-27: Done - Better Tile Functions
+			Done - Sound Sensitivity Adjustments
 			Via Touch OSC??

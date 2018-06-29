@@ -5,7 +5,8 @@ TileSystem ts1, ts2;		// declare ts as a Tile System
 float testScale = 0.05;		// scale for testing tile systems, adjusted with mouse wheel
 int history = 24;			// length of tile history (minimum 1)
 float strokeW;				// global to hold stroke weight
-float ampCurve = 1;			// adjust sound sensitivity
+float ampCurve = 1;			// adjust sound sensitivity. Doesn't work below 1?
+float ampGain = 1;			// adjust gain.
 
 // ********************************************************************************************************************
 void settings() {
@@ -51,7 +52,7 @@ void setup(){
 	tileImg1 = loadImage("tile-test-i.png"); // alternate tile image for testing
 	mask = loadImage("mask.png"); // test mask
 	videoMask = loadImage("VideoMaskBW.png"); // test video mask
-	ts1 = new TileSystem(mask,symmetry12M,tiling12M,6,20,1);
+	ts1 = new TileSystem(mask,symmetry12M,tiling12M,6,20,3);
 	ts1.setHistory();
 	ts2 = new TileSystem(mask,symmetry12M,tiling12M,6,20,2);
 	ts2.setHistory();
@@ -70,10 +71,10 @@ void draw(){
 	background(0);
 	blendMode(ADD);
 
-	strokeW = mapCurve(l,0,1,2,500,ampCurve);
-	tsDisplay(ts1, 320, 480, 0.32, -PI*millis()/100000, 0);
+	strokeW = mapCurve(l,0,1,3,500*ampGain,ampCurve);
+	tsDisplay(ts1, 320, 480, 0.32, -PI*millis()/200000, 0);
 
-	strokeW = mapCurve(l,0,1,2,500,ampCurve);
+	strokeW = mapCurve(r,0,1,3,500*ampGain,ampCurve);
 	tsDisplay(ts2, 960, 480, 0.32, -PI*millis()/900000, 0);
 
 	// strokeW = mapCurve(r,0,1,3,1000,2);
@@ -112,6 +113,10 @@ void tsDisplay (TileSystem t, float x, float y, float s, float r, float w) { // 
 }
 
 float mapCurve (float value, float low1, float high1, float low2, float high2, float power) {
+	return(map(pow(value,power), low1, high1, low2, high2));
+}
+
+float mapCurveOld (float value, float low1, float high1, float low2, float high2, float power) {
 	return(pow(map(value, low1, high1, low2, high2),power));
 }
 
@@ -127,16 +132,19 @@ void mousePressed() {
 void mouseReleased() {
 	// ts.choose(0);
 	// println("mouse 0");
-	println("testScale: "+testScale);
+	// println("testScale: "+testScale);
+	ts1.tile.design = int (random(3));
+	ts2.tile.design = int (random(3));
+	println("ts1.tile.design: "+ts1.tile.design);
 }
 
 void mouseWheel(MouseEvent event) {
   // testScale += float(event.getCount())/100;
   // if(testScale<0.05) {testScale = 0.05;};
   // println("Scale: "+testScale);
-  ampCurve += float(event.getCount())/100;
-  if(ampCurve<0.1) {ampCurve = 0.1;};
-  if(ampCurve>2.0) {ampCurve = 2.0;};
-  println("ampCurve: "+ampCurve);
+  ampGain += float(event.getCount())/100;
+  if(ampGain<0.1) {ampGain = 0.1;};
+  if(ampGain>10.0) {ampGain = 10.0;};
+  println("ampGain: "+ampGain);
 }
 

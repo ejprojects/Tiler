@@ -6,14 +6,14 @@
 class Tile {
 	PImage mask; //even if it's unmasked, the tile dimensions come from this file
 	int tileWidth, tileHeight; //pulled from the mask file
-	int mode; // selects generative design options
+	int design; // selects generative design options
 	PGraphics[] imgList = new PGraphics[history]; // rendering destinations for the generative tile graphics / frames
 	int currentFrame; // points to the current frame
 	float scale = 1.0; // needed to make old code run, not used, yet??
 
-	Tile (PImage mask_, int mode_) {
+	Tile (PImage mask_, int design_) {
 		mask = mask_;
-		mode = mode_;
+		design = design_;
 		tileWidth = mask.width;
 		tileHeight = mask.height;
 		for (int i = 0; i < imgList.length; ++i) {
@@ -24,6 +24,8 @@ class Tile {
 
 	void generateTile(PGraphics frame) { // here we draw to the new tile frame
 
+		// println("design: "+design);
+
 		frame.beginDraw();
 		frame.strokeWeight(strokeW);
 		frame.stroke(255);
@@ -31,7 +33,7 @@ class Tile {
 		frame.blendMode(ADD);
 		frame.clear();
 
-		switch (mode) {
+		switch (design) {
 			case 0 :
 			design0(frame);
 			break;
@@ -45,7 +47,7 @@ class Tile {
 			design3(frame);
 			break;
 			default :
-			println("tile design mode broken: "+mode);
+			println("tile design mode broken: "+design);
 			break;
 		}
 		
@@ -98,13 +100,40 @@ class Tile {
 	}
 
 	void design2 (PGraphics frame) { // circles
+		frame.pushMatrix();
 		frame.rotate(float(millis())/1991*PI);  // slower
+		scale = 1.5;
 		frame.ellipse(80, 20, 200*scale, 200*scale);
+		frame.popMatrix();
+		scale = 2.0;
+		frame.pushMatrix();
+		frame.rotate(float(millis())/-1233*PI);  // slower
+		frame.ellipse(25, 150, 200*scale, 200*scale);
+		frame.popMatrix();
+		scale = 2.5;
+		frame.pushMatrix();
+		frame.rotate(float(millis())/2523*PI);  // slower
+		frame.ellipse(250, 100, 200*scale, 200*scale);
+		frame.popMatrix();
+
 	}
 
 	void design3 (PGraphics frame) { // ellipses
-		frame.rotate(float(millis())/-1788*PI);  // slower
-		frame.ellipse(100, 30, 300*scale, 100*scale);
+		frame.pushMatrix();
+		frame.rotate(float(millis())/-1834*PI);  // slower
+		scale = 1.5;
+		frame.ellipse(80, 20, 200*scale, 200*scale);
+		frame.popMatrix();
+		scale = 2.0;
+		frame.pushMatrix();
+		frame.rotate(float(millis())/1533*PI);  // slower
+		frame.ellipse(25, 150, 200*scale, 200*scale);
+		frame.popMatrix();
+		scale = 2.5;
+		frame.pushMatrix();
+		frame.rotate(float(millis())/2207*PI);  // slower
+		frame.ellipse(200, 100, 125*scale, 125*scale);
+		frame.popMatrix();
 	}
 
 

@@ -103,6 +103,10 @@ class TileSystem {
 		popMatrix();
 	}
 
+	void redesign(int d) {
+		tile.design = d;
+	}
+
 	// Radial History- set the tiles' timeShift to maximize with distance from center
 	void setHistory() {
 		float maxX = 0;
@@ -151,6 +155,7 @@ class TileData {
 	float screenX, screenY; // cell center screen coordinates
 	boolean isOnScreen; // flag cells that could be visible
 	int timeShift; // how many frames back are we looking?
+	// int design; // which design mode to draw
 	// later add scale, transparency or mask,
 
 	TileData (float xLoc_, float yLoc_, float angle_, float flip_) {
@@ -158,6 +163,7 @@ class TileData {
 		yLoc = yLoc_;
 		angle = angle_;
 		flip = flip_;
+		// design = design_;
 		// timeShift = 0; // redundantly
 
 	}

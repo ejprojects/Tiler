@@ -24,6 +24,8 @@ void cycling() {
 
 	if (timer(videoLengths[movement] + 2000)) {
 		sendOSC("/Fade", 2);
+		ts1.tile.design = int (random(3));
+		ts2.tile.design = int (random(3));
 		}
 
 	
