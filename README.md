@@ -43,4 +43,5 @@ Starting fresh with a modular tile method
 2018-06-27: Done - Work on communication with Vuo
 2018-06-27: Done - Better Tile Functions
 			Done - Sound Sensitivity Adjustments
-			Via Touch OSC??
+----
+2018-06-28: BEPA final
