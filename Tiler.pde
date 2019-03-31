@@ -6,7 +6,7 @@ float testScale = 0.05;		// scale for testing tile systems, adjusted with mouse 
 int history = 24;			// length of tile history (minimum 1)
 float strokeW;				// global to hold stroke weight
 float ampCurve = 1;			// adjust sound sensitivity. Doesn't work below 1?
-float ampGain = 1;			// adjust gain.
+float ampGain = 10;			// adjust gain.
 
 // ********************************************************************************************************************
 void settings() {
@@ -144,7 +144,7 @@ void mouseWheel(MouseEvent event) {
   // println("Scale: "+testScale);
   ampGain += float(event.getCount())/100;
   if(ampGain<0.1) {ampGain = 0.1;};
-  if(ampGain>10.0) {ampGain = 10.0;};
+  if(ampGain>100.0) {ampGain = 100.0;};
   println("ampGain: "+ampGain);
 }
 
